@@ -1,0 +1,17 @@
+<h1>EmpreGO</h1>
+<h2>LOGIN</h2>
+<hr>
+<form action="/login" method="post">
+    <h3>Faça seu Login</h3>
+    <label for="email">E-mail</label>
+    <input type="email" name="email" required><br>
+    <label for="password">Password</label>
+    <input type="password" name="password" required><br>
+    <button type="submit">Acessar</button>
+
+    {% if errormsg %}
+
+    <p style="color: red;">{{errormsg}}</p>
+
+    {% endif %}
+</form>
