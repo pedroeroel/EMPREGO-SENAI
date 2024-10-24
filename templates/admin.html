@@ -3,7 +3,7 @@
 <p>Menu</p>
 <hr>
 <ul>
-    <li><a href="/register-company">Nova Empresa</a></li>
+    <li><a href="/new-company">Nova Empresa</a></li>
     <li><a href="/logout">Sair</a></li>
 </ul>
 
@@ -13,11 +13,11 @@
     <p>Não há empresas ativas.</p>
 {% else %}
 {% for company in active_companies %}
-<p>ID: {{ active_companies[0] }} - 
-    NOME: {{ active_companies[1] }} -
-    CNPJ: {{ active_companies[2] }} -
-    TEL: {{ active_companies[3] }} -
-    E-MAIL: {{ active_companies[4] }} -
+<p>ID: {{ company[0] }} - 
+    NOME: {{ company[1] }} -
+    CNPJ: {{ company[2] }} -
+    TEL: {{ company[3] }} -
+    E-MAIL: {{ company[4] }}
 </p>
 
 {% endfor %}
@@ -31,11 +31,11 @@
     <p>Não há empresas inativas.</p>
 {% else %}
 {% for company in inactive_companies %}
-<p> ID: {{ inactive_companies[0] }} - 
-    NOME: {{ inactive_companies[1] }} -
-    CNPJ: {{ inactive_companies[2] }} -
-    TEL: {{ inactive_companies[3] }} -
-    E-MAIL: {{ inactive_companies[4] }} -
+<p> ID: {{ company[0] }} - 
+    NOME: {{ company[1] }} -
+    CNPJ: {{ company[2] }} -
+    TEL: {{ company[3] }} -
+    E-MAIL: {{ company[4] }} -
 </p>
 
 {% endfor %}
