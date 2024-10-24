@@ -236,6 +236,8 @@ def delete_company (id):
 
     try:
         connection, cursor = DB.connect()
+
+        cursor.execute('''DELETE FROM vacancy WHERE ID_Company = %s ;''', (id,))        
         cursor.execute('''DELETE FROM company WHERE ID_Company = %s ;''', (id,))
 
     except Exception as e:
