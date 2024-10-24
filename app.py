@@ -53,11 +53,16 @@ def login():
             error = 'Esse email não está cadastrado em nosso sistema!'
             return render_template('login.html', errormsg=error)
         
+        elif password == company[5] and company[6] == 'inactive':
+            error = 'Sua empresa está inativa!'
+            return render_template('login.html', errormsg=error)
+        
         elif password == company[5]:
             session['email'] = email
             session['password'] = password
+            session['companyInfo'] = company
             
-            return redirect('/')
+            return redirect('/company')
 
         elif password != company[5]:
             error = 'Senha incorreta!'
@@ -264,6 +269,35 @@ def delete_company (id):
     
     return redirect('/admin')
 
+@app.route('/company')
+def company ():
+
+    if not session:
+        return redirect('/login')
+    if session.get('adm') == True:
+        return redirect('/admin')
+
+    company = session['companyInfo']
+
+    try:
+
+        connection, cursor = DB.connect()
+        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'active' ORDER BY ID_Vacancy DESC", (company[0],))
+        activeVacancies = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'inactive' ORDER BY ID_Vacancy DESC", (company[0],))
+        inactiveVacancies = cursor.fetchall()
+
+    except Exception as e:
+        print(f'Backend Error: {e}')
+
+    except Error as e:
+        print(f'DB Error: {e}')
+
+    finally:
+        DB.stop(connection, cursor)
+    
+    return render_template('company.html', company=company, activeVacancies=activeVacancies, inactiveVacancies=inactiveVacancies)
 
 if environment == 'development':
     if __name__ == '__main__':
