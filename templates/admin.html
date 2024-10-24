@@ -12,12 +12,16 @@
 {%if not active_companies %}
     <p>Não há empresas ativas.</p>
 {% else %}
-{% for company in active_companies %}
-<p>ID: {{ company[0] }} - 
-    NOME: {{ company[1] }} -
-    CNPJ: {{ company[2] }} -
-    TEL: {{ company[3] }} -
-    E-MAIL: {{ company[4] }}
+{% for a_company in active_companies %}
+
+<a href="/edit-company/{{ a_company[0] }}"><button>Editar</button></a>
+<a href="/switch-company-status/{{ a_company[0] }}"><button>Desativar</button></a>
+
+<p>ID: {{ a_company[0] }} - 
+    NOME: {{ a_company[1] }} -
+    CNPJ: {{ a_company[2] }} -
+    TEL: {{ a_company[3] }} -
+    E-MAIL: {{ a_company[4] }}
 </p>
 
 {% endfor %}
@@ -27,15 +31,23 @@
 
 <h2>Empresas Inativas</h2>
 
+
 {%if not inactive_companies %}
-    <p>Não há empresas inativas.</p>
+
+<p>Não há empresas inativas.</p>
+
 {% else %}
-{% for company in inactive_companies %}
-<p> ID: {{ company[0] }} - 
-    NOME: {{ company[1] }} -
-    CNPJ: {{ company[2] }} -
-    TEL: {{ company[3] }} -
-    E-MAIL: {{ company[4] }} -
+
+{% for in_company in inactive_companies %}
+
+<a href="/edit-company/{{ in_company[0] }}"><button>Editar</button></a>
+<a href="/switch-company-status/{{ in_company[0] }}"><button>Ativar</button></a>
+
+<p> ID: {{ in_company[0] }} - 
+    NOME: {{ in_company[1] }} -
+    CNPJ: {{ in_company[2] }} -
+    TEL: {{ in_company[3] }} -
+    E-MAIL: {{ in_company[4] }} -
 </p>
 
 {% endfor %}

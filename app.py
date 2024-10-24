@@ -10,7 +10,6 @@ app.secret_key = SECRET_KEY
 
 @app.route('/')
 def index():
-
     return render_template('index.html')
 
 # LOGIN PAGE
@@ -18,10 +17,13 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    if request.method == 'GET':
+    if session.get('adm') == True:
+        return redirect('/admin')
+    
+    elif request.method == 'GET':
         return render_template('login.html')
     
-    if request.method == 'POST':
+    elif request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
 
@@ -37,7 +39,8 @@ def login():
 
 @app.route('/admin')
 def admin():
-    if not session or not session['adm'] == True:
+
+    if session.get('adm') != True:
         return redirect('/login')
 
     try:
@@ -54,11 +57,12 @@ def admin():
         cursor.execute(SQLstatement)
         inactive_companies = cursor.fetchall()
 
-        return render_template('admin.html', active_companies=active_companies, inactive_companies=inactive_companies)
     except:
         print('error')
     finally:
         DB.stop(connection, cursor)
+    
+    return render_template('admin.html', active_companies=active_companies, inactive_companies=inactive_companies)
 
 # LOGOUT ROUTE
 
@@ -75,7 +79,7 @@ def new_company ():
 
     elif request.method == 'GET':
         return render_template('new-company.html')
-        
+
     elif request.method == 'POST':
         
         companyName = request.form['name']
@@ -103,6 +107,98 @@ def new_company ():
             DB.stop(connection, cursor)
         
         return redirect('/admin')
+
+@app.route('/edit-company/<int:id>', methods=['GET', 'POST'])
+def edit_company (id):
+
+    if session.get('adm') != True:
+        return redirect('/login')
+
+    elif request.method == 'GET':
+
+        try:
+            connection, cursor = DB.connect()
+
+            cursor.execute(f'SELECT * FROM company WHERE ID_Company = {id} ;')
+            company = cursor.fetchone()
+
+        except Exception as e:
+            print(f'Back-End Error: {e}')
+        except Error as e:
+            print(f"DB Error: {e}")
+        finally:
+
+            DB.stop(connection, cursor)
+        return render_template('edit-company.html', company=company, id=id)
+
+    elif request.method == 'POST':
+        
+        companyName = request.form['name']
+        companyEmail = request.form['email']
+        companyCNPJ = request.form['cnpj']
+        companyPhoneNumber = request.form['phone']
+        companyPassword = request.form['password']
+
+        if not companyName or not companyEmail or not companyCNPJ or not companyPhoneNumber or not companyPassword:
+            return render_template('edit-company.html', errormsg='Todos os campos são obrigatórios!')
+        
+        try:
+            connection, cursor = DB.connect()
+
+            SQLstatement = '''
+            UPDATE company
+            SET name_Company = %s,
+            cnpj = %s,
+            phone = %s,
+            email = %s,
+            password = %s
+            WHERE ID_Company = %s;'''
+
+            cursor.execute(SQLstatement, (companyName, companyCNPJ, companyPhoneNumber, companyEmail, companyPassword, id))
+            connection.commit()
+
+        except Exception as e:
+            print(f'Error: {e}')
+        finally:
+            DB.stop(connection, cursor)
+        
+        return redirect('/admin')
+
+@app.route('/switch-company-status/<int:id>')
+def switch_company_status (id):
+    
+    if session.get('adm') != True:
+        return redirect('/login')
+
+    try:
+        connection, cursor = DB.connect()
+        cursor.execute('''SELECT * FROM company WHERE ID_Company = %s ;''', (id,))
+        
+        company = cursor.fetchone()
+
+        if company[6] == 'active':
+
+            cursor.execute('''UPDATE company
+                        SET status = 'inactive' 
+                        WHERE ID_Company = %s ;''', (id,))
+            
+        elif company[6] == 'inactive':
+            
+            cursor.execute('''UPDATE company
+                SET status = 'active' 
+                WHERE ID_Company = %s ;''', (id,))
+
+    except Exception as e:
+        print(f'Back-End Error: {e}')
+
+    except Error as e:
+        print(f"DB Error: {e}")
+        
+    finally:
+        connection.commit()
+        DB.stop(connection, cursor)
+    
+    return redirect('/admin')
 
 if environment == 'development':
     if __name__ == '__main__':

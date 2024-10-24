@@ -1,0 +1,13 @@
+<form action="/edit-company/{{id}}" method="post">
+    <label for="name">Nome da Empresa:</label>
+    <input value="{{company[1]}}" required type="text" name="name"><br>
+    <label for="cnpj">CNPJ:</label>
+    <input value="{{company[2]}}" required type="number" maxlength=14 name="cnpj"><br>
+    <label for="phone">Telefone:</label>
+    <input value="{{company[3]}}" required type="number" maxlength=11 name="phone"><br>
+    <label for="email">E-mail:</label>
+    <input value="{{company[4]}}" required type="email" name="email"><br>
+    <label for="password">Senha:</label>
+    <input value="{{company[5]}}" required type="text" name="password"><br>
+    <button type="submit">Edit</button>
+</form>
