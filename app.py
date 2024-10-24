@@ -200,6 +200,29 @@ def switch_company_status (id):
     
     return redirect('/admin')
 
+@app.route('/delete-company/<int:id>')
+def delete_company (id):
+    
+    if session.get('adm') != True:
+        return redirect('/login')
+
+    try:
+        connection, cursor = DB.connect()
+        cursor.execute(''' DELETE FROM company WHERE ID_Company = %s ;''', (id,))
+
+    except Exception as e:
+        print(f'Back-End Error: {e}')
+
+    except Error as e:
+        print(f"DB Error: {e}")
+        
+    finally:
+        connection.commit()
+        DB.stop(connection, cursor)
+    
+    return redirect('/admin')
+
+
 if environment == 'development':
     if __name__ == '__main__':
         app.run(debug=True)

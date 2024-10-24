@@ -14,6 +14,7 @@
 {% else %}
 {% for a_company in active_companies %}
 
+<a href="/delete-company/{{ a_company[0] }}"><button>Excluir</button></a>
 <a href="/edit-company/{{ a_company[0] }}"><button>Editar</button></a>
 <a href="/switch-company-status/{{ a_company[0] }}"><button>Desativar</button></a>
 
@@ -40,6 +41,7 @@
 
 {% for in_company in inactive_companies %}
 
+<a href="/delete-company/{{ in_company[0] }}"><button>Excluir</button></a>
 <a href="/edit-company/{{ in_company[0] }}"><button>Editar</button></a>
 <a href="/switch-company-status/{{ in_company[0] }}"><button>Ativar</button></a>
 
