@@ -16,7 +16,7 @@
 
 <a href="/delete-company/{{ a_company[0] }}"><button>Excluir</button></a>
 <a href="/edit-company/{{ a_company[0] }}"><button>Editar</button></a>
-<a href="/switch-company-status/{{ a_company[0] }}"><button>Desativar</button></a>
+<a onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-company-status/{{ a_company[0] }}"><button>Desativar</button></a>
 
 <p>ID: {{ a_company[0] }} - 
     NOME: {{ a_company[1] }} -
@@ -43,7 +43,7 @@
 
 <a href="/delete-company/{{ in_company[0] }}"><button>Excluir</button></a>
 <a href="/edit-company/{{ in_company[0] }}"><button>Editar</button></a>
-<a href="/switch-company-status/{{ in_company[0] }}"><button>Ativar</button></a>
+<a onclick="confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-company-status/{{ in_company[0] }}"><button>Ativar</button></a>
 
 <p> ID: {{ in_company[0] }} - 
     NOME: {{ in_company[1] }} -

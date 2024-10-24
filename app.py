@@ -17,6 +17,8 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
+    connection, cursor = DB.connect()
+
     if session.get('adm') == True:
         return redirect('/admin')
     
@@ -27,13 +29,35 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
+        try:
+            cursor.execute('''SELECT * FROM company WHERE email = %s ;''', (email,))
+            company = cursor.fetchone()
+
+        except Exception as e:
+            print(f"Backend Error: {e}")
+            return redirect('/login')
+        except Error as e:
+            print(f"DB Error: {e}")
+            return redirect('/login')
+
         if not email or not password:
             error = 'Todos os campos precisam estar preenchidos!'
             return render_template('login.html', errormsg=error)
-        
-        if email == MASTER_EMAIL and password == MASTER_PASSWORD:
+    
+        elif email == MASTER_EMAIL and password == MASTER_PASSWORD:
             session['adm'] = True
             return redirect('/admin')
+
+        elif not company:
+            error = 'Esse email não está cadastrado em nosso sistema!'
+            return render_template('login.html', errormsg=error)
+        
+        elif password == company[5]:
+            session['email'] = email
+            session['password'] = password
+
+            return redirect('/')
+        
 
 # ADMIN PAGE
 
@@ -182,6 +206,10 @@ def switch_company_status (id):
                         SET status = 'inactive' 
                         WHERE ID_Company = %s ;''', (id,))
             
+            cursor.execute('''UPDATE vacancy
+                SET status = 'inactive' 
+                WHERE ID_Company = %s ;''', (id,))
+
         elif company[6] == 'inactive':
             
             cursor.execute('''UPDATE company
@@ -208,7 +236,7 @@ def delete_company (id):
 
     try:
         connection, cursor = DB.connect()
-        cursor.execute(''' DELETE FROM company WHERE ID_Company = %s ;''', (id,))
+        cursor.execute('''DELETE FROM company WHERE ID_Company = %s ;''', (id,))
 
     except Exception as e:
         print(f'Back-End Error: {e}')
