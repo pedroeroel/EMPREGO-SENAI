@@ -36,6 +36,7 @@ def login():
         except Exception as e:
             print(f"Backend Error: {e}")
             return redirect('/login')
+        
         except Error as e:
             print(f"DB Error: {e}")
             return redirect('/login')
@@ -55,8 +56,12 @@ def login():
         elif password == company[5]:
             session['email'] = email
             session['password'] = password
-
+            
             return redirect('/')
+
+        elif password != company[5]:
+            error = 'Senha incorreta!'
+            return render_template('login.html', errormsg=error)
         
 
 # ADMIN PAGE
@@ -83,6 +88,7 @@ def admin():
 
     except:
         print('error')
+
     finally:
         DB.stop(connection, cursor)
     
@@ -98,6 +104,7 @@ def logout():
 # COMPANY REGISTERING PAGE
 @app.route('/new-company', methods=['GET', 'POST'])
 def new_company ():
+
     if session.get('adm') != True:
         return redirect('/login')
 
@@ -127,6 +134,7 @@ def new_company ():
 
         except Exception as e:
             print(f'Error: {e}')
+    
         finally:
             DB.stop(connection, cursor)
         
@@ -148,11 +156,14 @@ def edit_company (id):
 
         except Exception as e:
             print(f'Back-End Error: {e}')
+    
         except Error as e:
             print(f"DB Error: {e}")
+    
         finally:
 
             DB.stop(connection, cursor)
+    
         return render_template('edit-company.html', company=company, id=id)
 
     elif request.method == 'POST':
@@ -183,6 +194,7 @@ def edit_company (id):
 
         except Exception as e:
             print(f'Error: {e}')
+    
         finally:
             DB.stop(connection, cursor)
         
