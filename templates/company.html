@@ -8,3 +8,57 @@
 
 <hr>
 
+<ul>
+    <li><a href="/new-vacancy">Nova Vaga</a></li>
+    <li><a href="/logout">Sair</a></li>
+</ul>
+
+<hr>
+
+<h2>Vagas Ativas</h2>
+
+{%if not activeVacancies %}
+    <p>Não há vagas ativas.</p>
+{% else %}
+{% for a_vacancy in activeVacancies %}
+
+<a href="/delete-vacancy/{{ a_vacancy[0] }}"><button>Excluir</button></a>
+<a href="/edit-vacancy/{{ a_vacancy[0] }}"><button>Editar</button></a>
+<a onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-company-status/{{ a_vacancy[0] }}"><button>Desativar</button></a>
+
+<p>ID: {{ a_vacancy[0] }} - 
+    NOME: {{ a_vacancy[1] }} -
+    CNPJ: {{ a_vacancy[2] }} -
+    TEL: {{ a_vacancy[3] }} -
+    E-MAIL: {{ a_vacancy[4] }}
+</p>
+
+{% endfor %}
+{% endif %}
+
+<hr>
+
+<h2>Vagas Inativas</h2>
+
+
+{%if not inactiveVacancies %}
+
+<p>Não há vagas inativas.</p>
+
+{% else %}
+
+{% for in_vacancy in inactiveVacancies %}
+
+<a href="/delete-vacancy/{{ in_vacancy[0] }}"><button>Excluir</button></a>
+<a href="/edit-vacancy/{{ in_vacancy[0] }}"><button>Editar</button></a>
+<a onclick="confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-company-status/{{ in_vacancy[0] }}"><button>Ativar</button></a>
+
+<p> ID: {{ in_vacancy[0] }} - 
+    NOME: {{ in_vacancy[1] }} -
+    CNPJ: {{ in_vacancy[2] }} -
+    TEL: {{ in_vacancy[3] }} -
+    E-MAIL: {{ in_vacancy[4] }}
+</p>
+
+{% endfor %}
+{% endif %}
