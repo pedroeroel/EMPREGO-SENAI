@@ -69,8 +69,7 @@ def login():
 
         elif password != company[5]:
             error = 'Senha incorreta!'
-            return render_template('login.html', errormsg=error)
-        
+            return render_template('login.html', errormsg=error)        
 
 # ADMIN PAGE
 
@@ -109,7 +108,8 @@ def logout():
     session.clear()
     return redirect('/')
 
-# COMPANY REGISTERING PAGE
+# COMPANY REGISTERING ROUTE
+
 @app.route('/new-company', methods=['GET', 'POST'])
 def new_company ():
 
@@ -147,6 +147,8 @@ def new_company ():
             DB.stop(connection, cursor)
         
         return redirect('/admin')
+
+# COMPANY EDITING ROUTE
 
 @app.route('/edit-company/<int:id>', methods=['GET', 'POST'])
 def edit_company (id):
@@ -208,6 +210,8 @@ def edit_company (id):
         
         return redirect('/admin')
 
+# COMPANY STATUS SWITCH ROUTE
+
 @app.route('/switch-company-status/<int:id>')
 def switch_company_status (id):
     
@@ -248,6 +252,8 @@ def switch_company_status (id):
     
     return redirect('/admin')
 
+# COMPANY DELETION ROUTE
+
 @app.route('/delete-company/<int:id>')
 def delete_company (id):
     
@@ -271,6 +277,8 @@ def delete_company (id):
         DB.stop(connection, cursor)
     
     return redirect('/admin')
+
+# COMPANY MENU ROUTE
 
 @app.route('/company')
 def company ():
@@ -302,6 +310,8 @@ def company ():
     
     return render_template('company.html', company=company, activeVacancies=activeVacancies, inactiveVacancies=inactiveVacancies)
 
+# VACANCY REGISTERING ROUTE
+
 @app.route('/new-vacancy', methods=['GET', 'POST'])
 def new_vancancy ():
 
@@ -313,7 +323,7 @@ def new_vancancy ():
 
     elif request.method == 'POST':
         
-        company = session.get('companyInfo')
+        company = session['companyInfo']
         companyID = company[0]
         vacancyTitle = request.form['title']
         vacancyDescription = request.form['description']
@@ -344,7 +354,74 @@ def new_vancancy ():
         
         return redirect('/company')
 
+#VACANCY EDITING ROUTE
 
+@app.route('/edit-vacancy/<int:id>', methods=['GET', 'POST'])
+def edit_vacancy (id):
+
+    if session.get('adm') == True:
+        return redirect('/adm')
+
+    elif request.method == 'GET':
+
+        try:
+            connection, cursor = DB.connect()
+
+            cursor.execute(f'SELECT * FROM vacancy WHERE ID_Vacancy = {id} ;')
+            vacancy = cursor.fetchone()
+
+            company = session['companyInfo']
+
+            if company[0] != vacancy[7]:
+                return redirect('/company')
+
+        except Exception as e:
+            print(f'Back-End Error: {e}')
+    
+        except Error as e:
+            print(f"DB Error: {e}")
+    
+        finally:
+
+            DB.stop(connection, cursor)
+    
+        return render_template('edit-vacancy.html', vacancy=vacancy, id=id)
+
+    elif request.method == 'POST':
+
+        vacancyTitle = request.form['title']
+        vacancyDescription = request.form['description']
+        vacancyArrangement = request.form['arrangement']
+        vacancyType = request.form['type']
+        vacancyLocation = request.form['location']
+        vacancySalary = request.form['salary']
+
+        if not vacancyTitle or not vacancyDescription or not vacancyArrangement or not vacancyType or not vacancyLocation or not vacancySalary:
+            return render_template('edit-vacancy.html', errormsg='All fields are obrigatory!')
+        
+        try:
+            connection, cursor = DB.connect()
+
+            SQLstatement = '''
+            UPDATE vacancy
+            SET title = %s,
+            description = %s,
+            arrangement = %s,
+            type = %s,
+            location = %s,
+            salary = %s
+            WHERE ID_Vacancy = %s;'''
+
+            cursor.execute(SQLstatement, (vacancyTitle, vacancyDescription, vacancyArrangement, vacancyType, vacancyLocation, vacancySalary, id))
+            connection.commit()
+
+        except Exception as e:
+            print(f'Error: {e}')
+    
+        finally:
+            DB.stop(connection, cursor)
+        
+        return redirect('/company')
 
 if environment == 'development':
     if __name__ == '__main__':

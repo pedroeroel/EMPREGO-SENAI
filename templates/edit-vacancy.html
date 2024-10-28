@@ -1,0 +1,50 @@
+<form action="/edit-vacancy/{{ id }}" method="post">
+    <label for="title">Título da Vaga:</label>
+    <input value="{{ vacancy[1] }}" required type="text" name="title"><br>
+    <label for="description">Descrição:</label>
+    <input value="{{ vacancy[2] }}" required type="text" name="description"><br>
+    <label for="arrangement">Modalidade:</label>
+    <select required name="arrangement">
+    {% if vacancy[3] == 'Onsite' %}
+
+        <option selected value="Onsite">Presencial</option>
+        <option value="Hybrid">Híbrido</option>
+        <option value="Remote">Remoto</option>
+
+    {% elif vacancy[3] == 'Hybrid' %}
+
+        <option value="Onsite">Presencial</option>
+        <option value="Hybrid" selected>Híbrido</option>
+        <option value="Remote">Remoto</option>
+    
+    {% elif vacancy[3] == 'Remote' %}
+
+        <option value="Onsite">Presencial</option>
+        <option value="Hybrid">Híbrido</option>
+        <option value="Remote" selected>Remoto</option>
+
+    {% endif %}
+
+    </select>
+    <label for="type">Tipo de Vaga:</label>
+    <select required name="type">
+
+    {% if vacancy[4] == 'CLT' %}
+
+        <option value="PJ">PJ</option>
+        <option selected value="CLT">CLT</option>
+
+    {% else %}
+
+    <option selected value="PJ">PJ</option>
+    <option value="CLT">CLT</option>
+
+    {% endif %}
+
+    </select>
+    <label for="location">Localização:</label>
+    <input type="text" required value="{{ vacancy[5] }}" name="location">
+    <label for="salart">Salário:</label>
+    <input type="number" required value="{{ vacancy[6] }}" name="salary">
+    <button type="submit">Cadastrar</button>
+</form>

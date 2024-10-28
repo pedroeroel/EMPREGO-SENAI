@@ -18,4 +18,18 @@
 
     {% endif %}
 
+    {% if session['adm'] %}
+
+    <li>
+        <a href="/admin">Menu Administrador</a>
+    </li>
+
+    {% elif session['companyInfo'] %}
+
+    <li>
+        <a href="/company">Menu Empresa</a>
+    </li>
+
+    {% endif %}
+
 </ul>
