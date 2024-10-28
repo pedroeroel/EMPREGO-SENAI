@@ -22,6 +22,9 @@ def login():
     if session.get('adm') == True:
         return redirect('/admin')
     
+    elif session.get('companyInfo') == True:
+        return redirect('/company')
+
     elif request.method == 'GET':
         return render_template('login.html')
     
@@ -298,6 +301,50 @@ def company ():
         DB.stop(connection, cursor)
     
     return render_template('company.html', company=company, activeVacancies=activeVacancies, inactiveVacancies=inactiveVacancies)
+
+@app.route('/new-vacancy', methods=['GET', 'POST'])
+def new_vancancy ():
+
+    if session.get('adm') == True:
+        return redirect('/login')
+
+    elif request.method == 'GET':
+        return render_template('new-vacancy.html')
+
+    elif request.method == 'POST':
+        
+        company = session.get('companyInfo')
+        companyID = company[0]
+        vacancyTitle = request.form['title']
+        vacancyDescription = request.form['description']
+        vacancyArrangement = request.form['arrangement']
+        vacancyType = request.form['type']
+        vacancyLocation = request.form['location']
+        vacancySalary = request.form['salary']
+        vacancyStatus = request.form ['status']
+
+        if not vacancyTitle or not vacancyDescription or not vacancyArrangement or not vacancyType or not vacancyLocation or not companyID or not vacancySalary or not vacancyStatus:
+            return render_template('new-vacancy.html', errormsg='All fields are obrigatory!')
+        
+        try:
+            connection, cursor = DB.connect()
+
+            SQLstatement = '''
+            INSERT INTO vacancy VALUES
+            (null, %s, %s, %s, %s, %s, %s, %s, %s) ;'''
+
+            cursor.execute(SQLstatement, (vacancyTitle, vacancyDescription, vacancyArrangement, vacancyType, vacancyLocation, vacancySalary, companyID, vacancyStatus))
+            connection.commit()
+
+        except Exception as e:
+            print(f'Error: {e}')
+    
+        finally:
+            DB.stop(connection, cursor)
+        
+        return redirect('/company')
+
+
 
 if environment == 'development':
     if __name__ == '__main__':
