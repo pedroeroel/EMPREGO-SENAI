@@ -470,6 +470,40 @@ def switch_vacancy_status (id):
 
     return redirect('/company')
 
+# VACANCY DELETION ROUTE
+
+@app.route('/delete-vacancy/<int:id>')
+def delete_vacancy (id):
+    
+    if session.get('adm') == True:
+        return redirect('/admin')
+
+    try:
+        connection, cursor = DB.connect()
+
+        cursor.execute('''SELECT * FROM vacancy WHERE ID_Vacancy = %s ;''', (id,))
+
+        vacancy = cursor.fetchone()
+        company = session['companyInfo']
+
+        if vacancy['ID_Company'] != company['ID_Company']:
+            return redirect('/company')
+            
+        else:
+            cursor.execute('''DELETE FROM vacancy WHERE ID_Vacancy = %s ;''', (id,))        
+
+    except Exception as e:
+        print(f'Back-End Error: {e}')
+
+    except Error as e:
+        print(f"DB Error: {e}")
+        
+    finally:
+        connection.commit()
+        DB.stop(connection, cursor)
+    
+    return redirect('/company')
+
 if environment == 'development':
     if __name__ == '__main__':
         app.run(debug=True)
