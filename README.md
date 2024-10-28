@@ -18,7 +18,6 @@ This project consists of a web app that promotes and helps in the search for job
 
 ## Features
 
-- Main Features:
  - Company registration, editing, activation/deactivation and exclusion;
  - Vacancy registration, editing, activation/deactivation and exclusion;
  - (Soon);
