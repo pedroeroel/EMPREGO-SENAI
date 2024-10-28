@@ -16,7 +16,7 @@ CREATE TABLE vacancy (
     ID_Vacancy INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
-    arragement ENUM('Onsite', 'Hybrid', 'Remote') NOT NULL,
+    arrangement ENUM('Onsite', 'Hybrid', 'Remote') NOT NULL,
     type ENUM ('CLT', 'PJ') NOT NULL,
     location VARCHAR(100),
     salary VARCHAR(10),
