@@ -1,23 +1,23 @@
 <form action="/edit-vacancy/{{ id }}" method="post">
     <label for="title">Título da Vaga:</label>
-    <input value="{{ vacancy[1] }}" required type="text" name="title"><br>
+    <input value="{{ vacancy[title] }}" required type="text" name="title"><br>
     <label for="description">Descrição:</label>
-    <input value="{{ vacancy[2] }}" required type="text" name="description"><br>
+    <input value="{{ vacancy[description] }}" required type="text" name="description"><br>
     <label for="arrangement">Modalidade:</label>
     <select required name="arrangement">
-    {% if vacancy[3] == 'Onsite' %}
+    {% if vacancy['arrangement'] == 'Onsite' %}
 
         <option selected value="Onsite">Presencial</option>
         <option value="Hybrid">Híbrido</option>
         <option value="Remote">Remoto</option>
 
-    {% elif vacancy[3] == 'Hybrid' %}
+    {% elif vacancy['arrangement'] == 'Hybrid' %}
 
         <option value="Onsite">Presencial</option>
         <option value="Hybrid" selected>Híbrido</option>
         <option value="Remote">Remoto</option>
     
-    {% elif vacancy[3] == 'Remote' %}
+    {% else %}
 
         <option value="Onsite">Presencial</option>
         <option value="Hybrid">Híbrido</option>
@@ -29,7 +29,7 @@
     <label for="type">Tipo de Vaga:</label>
     <select required name="type">
 
-    {% if vacancy[4] == 'CLT' %}
+    {% if vacancy['type'] == 'CLT' %}
 
         <option value="PJ">PJ</option>
         <option selected value="CLT">CLT</option>
@@ -43,8 +43,8 @@
 
     </select>
     <label for="location">Localização:</label>
-    <input type="text" required value="{{ vacancy[5] }}" name="location">
+    <input type="text" required value="{{ vacancy['location'] }}" name="location">
     <label for="salart">Salário:</label>
-    <input type="number" required value="{{ vacancy[6] }}" name="salary">
+    <input type="number" required value="{{ vacancy['salary'] }}" name="salary">
     <button type="submit">Cadastrar</button>
 </form>

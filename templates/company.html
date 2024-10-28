@@ -2,9 +2,9 @@
 
 <hr>
 
-<h2>Olá, {{ company[1] }} !</h2>
+<h2>Olá, {{ company['name'] }} !</h2>
 
-<p>CNPJ: {{ company[2] }}</p>
+<p>CNPJ: {{ company['cnpj'] }}</p>
 
 <hr>
 
@@ -22,18 +22,18 @@
 {% else %}
 {% for a_vacancy in activeVacancies %}
 
-<a href="/delete-vacancy/{{ a_vacancy[0] }}"><button>Excluir</button></a>
-<a href="/edit-vacancy/{{ a_vacancy[0] }}"><button>Editar</button></a>
-<a onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-vacancy-status/{{ a_vacancy[0] }}"><button>Desativar</button></a>
+<a href="/delete-vacancy/{{ a_vacancy['ID_Vacancy'] }}"><button>Excluir</button></a>
+<a href="/edit-vacancy/{{ a_vacancy['ID_Vacancy'] }}"><button>Editar</button></a>
+<a onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-vacancy-status/{{ a_vacancy['ID_Vacancy'] }}"><button>Desativar</button></a>
 
 <p>
-    ID: {{ a_vacancy[0] }} - 
-    TÍTULO: {{ a_vacancy[1] }} -
-    DESCRIÇÃO: {{ a_vacancy[2] }} -
-    MODALIDADE: {{ a_vacancy[3] }} -
-    TIPO: {{ a_vacancy[4] }} -
-    LOCALIZAÇÃO: {{ a_vacancy[5] }} -
-    SALÁRIO: {{ a_vacancy[6] }}
+    ID: {{ a_vacancy['ID_Vacancy'] }} - 
+    TÍTULO: {{ a_vacancy['title'] }} -
+    DESCRIÇÃO: {{ a_vacancy['description'] }} -
+    MODALIDADE: {{ a_vacancy['arrangement'] }} -
+    TIPO: {{ a_vacancy['type'] }} -
+    LOCALIZAÇÃO: {{ a_vacancy['location'] }} -
+    SALÁRIO: {{ a_vacancy['salary'] }}
 </p>
 
 {% endfor %}
@@ -52,17 +52,17 @@
 
 {% for in_vacancy in inactiveVacancies %}
 
-<a href="/delete-vacancy/{{ in_vacancy[0] }}"><button>Excluir</button></a>
-<a href="/edit-vacancy/{{ in_vacancy[0] }}"><button>Editar</button></a>
-<a onclick="confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-vacancy-status/{{ in_vacancy[0] }}"><button>Ativar</button></a>
+<a href="/delete-vacancy/{{ in_vacancy['ID_Vacancy'] }}"><button>Excluir</button></a>
+<a href="/edit-vacancy/{{ in_vacancy['ID_Vacancy'] }}"><button>Editar</button></a>
+<a onclick="confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-vacancy-status/{{ in_vacancy['ID_Vacancy'] }}"><button>Ativar</button></a>
 
-<p> ID: {{ in_vacancy[0] }} - 
-    TÍTULO: {{ in_vacancy[1] }} -
-    DESCRIÇÃO: {{ in_vacancy[2] }} -
-    MODALIDADE: {{ in_vacancy[3] }} -
-    TIPO: {{ in_vacancy[4] }} -
-    LOCALIZAÇÃO: {{ in_vacancy[5] }} -
-    SALÁRIO: {{ in_vacancy[6] }}
+<p> ID: {{ in_vacancy['ID_Vacancy'] }} - 
+    TÍTULO: {{ in_vacancy['title'] }} -
+    DESCRIÇÃO: {{ in_vacancy['description'] }} -
+    MODALIDADE: {{ in_vacancy['arrangement'] }} -
+    TIPO: {{ in_vacancy['type'] }} -
+    LOCALIZAÇÃO: {{ in_vacancy['location'] }} -
+    SALÁRIO: {{ in_vacancy['salary'] }}
 </p>
 
 {% endfor %}

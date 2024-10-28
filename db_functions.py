@@ -12,7 +12,7 @@ class DB:
         database = DB_NAME
         )
 
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary=True)
 
         return connection, cursor
     

@@ -56,18 +56,18 @@ def login():
             error = 'Esse email não está cadastrado em nosso sistema!'
             return render_template('login.html', errormsg=error)
         
-        elif password == company[5] and company[6] == 'inactive':
+        elif password == company['password'] and company['password'] == 'inactive':
             error = 'Sua empresa está inativa!'
             return render_template('login.html', errormsg=error)
         
-        elif password == company[5]:
+        elif password == company['password']:
             session['email'] = email
             session['password'] = password
             session['companyInfo'] = company
             
             return redirect('/company')
 
-        elif password != company[5]:
+        elif password != company['password']:
             error = 'Senha incorreta!'
             return render_template('login.html', errormsg=error)        
 
@@ -210,7 +210,7 @@ def edit_company (id):
         
         return redirect('/admin')
 
-# COMPANY STATUS SWITCH ROUTE
+# COMPANY STATUS SWITCHING ROUTE
 
 @app.route('/switch-company-status/<int:id>')
 def switch_company_status (id):
@@ -224,7 +224,7 @@ def switch_company_status (id):
         
         company = cursor.fetchone()
 
-        if company[6] == 'active':
+        if company['status'] == 'active':
 
             cursor.execute('''UPDATE company
                         SET status = 'inactive' 
@@ -234,7 +234,7 @@ def switch_company_status (id):
                 SET status = 'inactive' 
                 WHERE ID_Company = %s ;''', (id,))
 
-        elif company[6] == 'inactive':
+        elif company['status'] == 'inactive':
             
             cursor.execute('''UPDATE company
                 SET status = 'active' 
@@ -293,10 +293,10 @@ def company ():
     try:
 
         connection, cursor = DB.connect()
-        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'active' ORDER BY ID_Vacancy DESC", (company[0],))
+        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'active' ORDER BY ID_Vacancy DESC", (company['ID_Company'],))
         activeVacancies = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'inactive' ORDER BY ID_Vacancy DESC", (company[0],))
+        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'inactive' ORDER BY ID_Vacancy DESC", (company['ID_Company'],))
         inactiveVacancies = cursor.fetchall()
 
     except Exception as e:
@@ -324,7 +324,7 @@ def new_vancancy ():
     elif request.method == 'POST':
         
         company = session['companyInfo']
-        companyID = company[0]
+        companyID = company['ID_Company']
         vacancyTitle = request.form['title']
         vacancyDescription = request.form['description']
         vacancyArrangement = request.form['arrangement']
@@ -354,7 +354,7 @@ def new_vancancy ():
         
         return redirect('/company')
 
-#VACANCY EDITING ROUTE
+# VACANCY EDITING ROUTE
 
 @app.route('/edit-vacancy/<int:id>', methods=['GET', 'POST'])
 def edit_vacancy (id):
@@ -372,7 +372,7 @@ def edit_vacancy (id):
 
             company = session['companyInfo']
 
-            if company[0] != vacancy[7]:
+            if company['ID_Company'] != vacancy['ID_Company']:
                 return redirect('/company')
 
         except Exception as e:
@@ -422,6 +422,53 @@ def edit_vacancy (id):
             DB.stop(connection, cursor)
         
         return redirect('/company')
+
+# VACANCY STATUS SWITCHING ROUTE
+
+@app.route('/switch-vacancy-status/<int:id>')
+def switch_vacancy_status (id):
+    
+    if session.get('adm') == True:
+        return redirect('/admin')
+    
+    elif not session['companyInfo']:
+        return redirect('/login')
+
+    try:
+
+
+        connection, cursor = DB.connect()
+        cursor.execute('''SELECT * FROM vacancy WHERE ID_Vacancy = %s ;''', (id,))
+        vacancy = cursor.fetchone()
+        
+        company = session['companyInfo']
+
+        if vacancy['ID_Company'] != company['ID_Company']:
+            return redirect('/company')
+
+        elif vacancy['status'] == 'active':
+
+            cursor.execute('''UPDATE vacancy
+                SET status = 'inactive' 
+                WHERE ID_Vacancy = %s ;''', (id,))
+
+        elif vacancy['status'] == 'inactive':
+            
+            cursor.execute('''UPDATE vacancy
+                SET status = 'active' 
+                WHERE ID_Vacancy = %s ;''', (id,))
+
+    except Exception as e:
+        print(f'Back-End Error: {e}')
+
+    except Error as e:
+        print(f"DB Error: {e}")
+        
+    finally:
+        connection.commit()
+        DB.stop(connection, cursor)
+
+    return redirect('/company')
 
 if environment == 'development':
     if __name__ == '__main__':

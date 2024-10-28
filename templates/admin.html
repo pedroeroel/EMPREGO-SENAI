@@ -14,15 +14,15 @@
 {% else %}
 {% for a_company in active_companies %}
 
-<a href="/delete-company/{{ a_company[0] }}"><button>Excluir</button></a>
-<a href="/edit-company/{{ a_company[0] }}"><button>Editar</button></a>
-<a onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-company-status/{{ a_company[0] }}"><button>Desativar</button></a>
+<a href="/delete-company/{{ a_company['ID_Company'] }}"><button>Excluir</button></a>
+<a href="/edit-company/{{ a_company['ID_Company'] }}"><button>Editar</button></a>
+<a onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-company-status/{{ a_company['ID_Company'] }}"><button>Desativar</button></a>
 
-<p>ID: {{ a_company[0] }} - 
-    NOME: {{ a_company[1] }} -
-    CNPJ: {{ a_company[2] }} -
-    TEL: {{ a_company[3] }} -
-    E-MAIL: {{ a_company[4] }}
+<p>ID: {{ a_company['ID_Company'] }} - 
+    NOME: {{ a_company['name'] }} -
+    CNPJ: {{ a_company['cnpj'] }} -
+    TEL: {{ a_company['phone'] }} -
+    E-MAIL: {{ a_company['email'] }}
 </p>
 
 {% endfor %}
@@ -41,15 +41,15 @@
 
 {% for in_company in inactive_companies %}
 
-<a href="/delete-company/{{ in_company[0] }}"><button>Excluir</button></a>
-<a href="/edit-company/{{ in_company[0] }}"><button>Editar</button></a>
-<a onclick="confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-company-status/{{ in_company[0] }}"><button>Ativar</button></a>
+<a href="/delete-company/{{ in_company['ID_Company'] }}"><button>Excluir</button></a>
+<a href="/edit-company/{{ in_company['ID_Company'] }}"><button>Editar</button></a>
+<a onclick="confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-company-status/{{ in_company['ID_Company'] }}"><button>Ativar</button></a>
 
-<p> ID: {{ in_company[0] }} - 
-    NOME: {{ in_company[1] }} -
-    CNPJ: {{ in_company[2] }} -
-    TEL: {{ in_company[3] }} -
-    E-MAIL: {{ in_company[4] }}
+<p> ID: {{ in_company['ID_Company'] }} - 
+    NOME: {{ in_company['name'] }} -
+    CNPJ: {{ in_company['cnpj'] }} -
+    TEL: {{ in_company['phone'] }} -
+    E-MAIL: {{ in_company['email'] }}
 </p>
 
 {% endfor %}
