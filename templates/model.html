@@ -5,13 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>EmpreGO - {% block pageName %}{% endblock %}</title>
+    <title>EmpreGO - {% block title %}{% endblock %}</title>
 
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
 
 </head>
 <body>
+
+    <header>
+
+        <h1>EmpreGO!</h1>
+
+        <nav>
+            <ul>
+                <li>Vagas</li>
+                <li>Empresas</li>
+                {% if session %}
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="/login">Login</a>
+                </li>
+                {% endif %}
+                {% if session['adm'] %}
+                <li>
+                    <a href="/admin">Administrador</a>
+                </li>
+                {% elif session['companyInfo'] %}
+                <li>
+                    <a href="/company">Empresa</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    </header>
+
+    {% block content %}
+    {% endblock %}
     
 
     <script src="../static/bootstrap/js/bootstrap.js"></script>

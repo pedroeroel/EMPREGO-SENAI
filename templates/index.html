@@ -1,35 +1,7 @@
-<h1>EmpreGO</h1>
-<h2>Página Inicial</h2>
-<p>Menu:</p>
-<hr>
-<ul>
+{% extends 'model.html' %}
 
-    {% if session %}
+{% block title %}Página Inicial{% endblock%}
 
-    <li>
-        <a href="/logout">Logout</a>
-    </li>
+{% block content %}
 
-    {% else %}
-
-    <li>
-        <a href="/login">Login</a>
-    </li>
-
-    {% endif %}
-
-    {% if session['adm'] %}
-
-    <li>
-        <a href="/admin">Menu Administrador</a>
-    </li>
-
-    {% elif session['companyInfo'] %}
-
-    <li>
-        <a href="/company">Menu Empresa</a>
-    </li>
-
-    {% endif %}
-
-</ul>
+{% endblock %}
