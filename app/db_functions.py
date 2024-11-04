@@ -1,5 +1,5 @@
 import mysql.connector
-from config import *
+from app.config import *
 
 class DB:
 
