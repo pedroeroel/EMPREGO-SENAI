@@ -1,8 +1,8 @@
 from flask import Flask, Blueprint
-from app.main.routes import main
-from app.auth.routes import auth
-from app.company.routes import company
-from app.admin.routes import admin
+from app.routes.main.routes import main
+from app.routes.auth.routes import auth
+from app.routes.company.routes import company
+from app.routes.admin.routes import admin
 from app.config import SECRET_KEY
 
 def create_app():

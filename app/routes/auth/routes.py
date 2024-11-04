@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, request, redirect
-from ..config import *
-from ..db_functions import *
+from ...config import *
+from ...db_functions import *
 from mysql.connector import *
 
 auth = Blueprint('auth', __name__, template_folder='templates')
