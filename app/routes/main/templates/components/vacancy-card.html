@@ -1,7 +1,7 @@
     <div class="card-header">{{ vacancy.company }}</div>
     <div class="card-body">
       <h5 class="card-title text-start"><strong>{{ vacancy.title }}</strong></h5>
-      <p class="card-text text-start fs-6 opacity-75">{{ vacancy.description }}</p>
+      <p class="card-text text-start fs-6 opacity-75">{{ vacancy.description | truncate(50) }}</p>
 
       <div class="row text-center justify-content-between">
         

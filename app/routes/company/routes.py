@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, session, redirect
 from ...config import *
 from ...db_functions import *
 from mysql.connector import *
+import locale
 
 company = Blueprint('company', __name__, template_folder='templates')
 
@@ -31,8 +32,21 @@ def company_menu ():
         print(f'DB Error: {e}')
 
     finally:
+
+        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
+
+        for vacancy in inactiveVacancies:
+            salary = float(vacancy['salary'])
+            vacancy['salary'] = locale.currency(salary, grouping=True)
+
+        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
+
+        for vacancy in activeVacancies:
+            salary = float(vacancy['salary'])
+            vacancy['salary'] = locale.currency(salary, grouping=True)
+
         DB.stop(connection, cursor)
-    
+
     return render_template('company.html', company=company, activeVacancies=activeVacancies, inactiveVacancies=inactiveVacancies)
 
 
