@@ -1,17 +1,34 @@
-<h1>EmpreGO</h1>
-<h2>LOGIN</h2>
-<hr>
-<form action="/login" method="post">
-    <h3>Faça seu Login</h3>
-    <label for="email">E-mail</label>
-    <input type="email" name="email" required><br>
-    <label for="password">Password</label>
-    <input type="password" name="password" required><br>
-    <button type="submit">Acessar</button>
+{% extends 'model.html' %}
 
-    {% if errormsg %}
+{% block title %}
+Login
+{% endblock %}
 
-    <p style="color: red;">{{errormsg}}</p>
+{% block content %}
 
-    {% endif %}
-</form>
+<div class="h-100 w-100 d-flex align-items-center justify-content-center">
+    <form method="post" action="/login" class="d-flex justify-content-center flex-wrap m-5 w-100" style="width: 22rem;">
+
+        <h2 class="mb-4">Login</h2>
+
+        <div class="mb-3 w-100">
+            <label for="email" class="form-label">Endereço de Email</label>
+            <input type="email" class="w-100 form-control" name="email" id="">
+        </div>
+    
+        <div class="mb-4 w-100">
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Acessar</button>
+    
+        {% if errormsg %}
+        <p style="color: red;" class="w-100">{{ errormsg }}
+        </p>
+        {% endif %}
+
+    </form>
+</div>
+
+{% endblock %}

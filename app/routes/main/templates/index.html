@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="container-fluid p-5 shadow">
+    <div class="index container-fluid p-5">
         <div class="d-flex flex-wrap w-100 justify-content-start">
             <p class="display-6 w-100">Encontre a vaga perfeita para você!</p>
             <p class="fs-7 bg-dark p-2 text-light text-center rounded-6">É só pesquisar!</p>
@@ -22,7 +22,9 @@
                 {% else %}
 
                 {% for vacancy in vacancies %}
-                    <div class="card col-12 col-md-6 col-lg-4 bg-light text-center">
+
+                    <div class="card mt-4 col-12 col-md-6 col-lg-4 bg-light text-center">
+                        
                         {% include 'components/vacancy-card.html' %}
 
                     </div>

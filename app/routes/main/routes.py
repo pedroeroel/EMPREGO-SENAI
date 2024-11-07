@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from ...db_functions import DB
+import locale
 from mysql.connector import Error
 
 main = Blueprint('main', __name__, template_folder='templates')
@@ -22,6 +23,12 @@ def index():
         print(f'Back-End Error: {e}')
 
     finally:
+
+        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
+
+        for vacancy in vacancies:
+            salary = float(vacancy['salary'])
+            vacancy['salary'] = locale.currency(salary, grouping=True)
 
         DB.stop(connection, cursor)
 
