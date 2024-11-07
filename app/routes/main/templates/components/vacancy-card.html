@@ -1,0 +1,17 @@
+    <div class="card-header">{{ vacancy.company }}</div>
+    <div class="card-body">
+      <h5 class="card-title text-start"><strong>{{ vacancy.title }}</strong></h5>
+      <p class="card-text text-start opacity-75">{{ vacancy.description }}</p>
+
+      <div class="row text-center justify-content-between">
+        
+        <p class="col-6 opacity-50 text-start">
+          {{vacancy.type}} • {% if vacancy.arrangement == 'Remote' %}Remoto{% elif vacancy.arrangement == 'Hybrid' %}Híbrido{% else %}Presencial{% endif %}
+        </p>
+
+        <a href="/job-apply/{{ vacancy.ID_Vacancy }}" class="btn col-4 w-100 btn-primary" data-mdb-ripple-init>Aplicar</a>
+
+      </div>
+    
+    </div>
+    <div class="card-footer text-muted">{{ vacancy.salary }}</div>
