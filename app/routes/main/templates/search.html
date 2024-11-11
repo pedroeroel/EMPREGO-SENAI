@@ -1,0 +1,39 @@
+{% extends 'model.html' %}
+
+{% block title %}Página de Pesquisa{% endblock %}
+
+{% block content %}
+
+    <div class="search container-fluid p-5">
+        <div class="d-flex flex-wrap w-100 justify-content-start">
+            {% if search %}
+            <p class="display-6 w-100">Resultados para '{{ search }}'</p>
+            <p class="fs-7 bg-dark p-2 text-light text-center rounded-6">Veja os resultados abaixo!</p>
+            {% else %}
+            <p class="display-6 w-100">Faça alguma pesquisa!</p>
+            {% endif %}
+        </div>
+
+        <hr class="w-100">
+
+        <div class="row p-2 w-100">
+            {% if not vacancies %}
+                {% if not search %}
+                <h2 class="text-center my-5">Faça alguma pesquisa para encontrar resultados!</h2>
+                {% else %}
+                <h2 class="text-center my-5">Nenhum resultado encontrado!</h2>
+                {% endif %}
+                
+            {% else %}
+                {% for vacancy in vacancies %}
+                    <div class="col-12 col-md-6 col-lg-4 mt-4">
+                        <div class="card shadow bg-light text-center w-100">
+                            {% include 'components/vacancy-card.html' %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

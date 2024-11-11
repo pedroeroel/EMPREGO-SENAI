@@ -49,26 +49,24 @@
       
       </ul>
       
-      <form class="d-flex input-group w-auto">
-      
+      <form class="d-flex input-group w-auto" action="/search" method="get">
         <input
-            type="search"
+            type="text"
             class="form-control"
             placeholder="Pesquisar (Ex. 'Dev Jr')"
             aria-label="Search"
-      
-            />
-      
-            <button
-            data-mdb-ripple-init
+            name="search"
+            id="search"
+            required
+        />
+        <button
             class="btn btn-outline-primary"
-            type="button"
-            data-mdb-ripple-color="dark"
-      
-            ><i class="bi bi-search"></i>
-          </button>
-      
-        </form>
+            type="submit"
+        >
+            <i class="bi bi-search"></i>
+        </button>
+    </form>
+    
       
       </div>
     
