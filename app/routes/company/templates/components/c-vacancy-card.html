@@ -1,11 +1,11 @@
-
-<div class="card">
+<div class="card w-100">
     <div class="card-body">
         <h5 class="card-title text-start"><strong>{{ vacancy.title }}</strong></h5>
         <p class="card-text text-start fs-6 opacity-75">{{ vacancy.description }}</p>
     
         <p class="col-12 opacity-50 text-center text-md-start text-lg-start text-nowrap">
-            ID: {{ vacancy['ID_Vacancy'] }} • {{vacancy.type}} • {% if vacancy.arrangement == 'Remote' %}Remoto{% elif vacancy.arrangement == 'Hybrid' %}Híbrido{% else %}Presencial{% endif %}
+            ID: {{ vacancy['ID_Vacancy'] }} • {{ vacancy.type }} • 
+            {% if vacancy.arrangement == 'Remote' %}Remoto{% elif vacancy.arrangement == 'Hybrid' %}Híbrido{% else %}Presencial{% endif %}
         </p>
     
         <div class="col-12 opacity-75 mb-3 text-md-start text-lg-start text-center text-nowrap">
@@ -13,14 +13,12 @@
         </div>
     
         <div class="row text-center justify-content-center g-3 flex-wrap">
-    
-            <a class="p-2 rounded-5 mx-2 border border-1 btn col-4 btn-primary"" href="/delete-vacancy/{{ vacancy['ID_Vacancy'] }}">Excluir</a>
-            <a class="p-2 rounded-5 mx-2 border border-1 btn col-3 btn-primary"" href="/edit-vacancy/{{ vacancy['ID_Vacancy'] }}">Editar</a>
-            <a class="p-2 rounded-5 mx-2 border border-1 btn col-3 col-sm-4 btn-primary"" onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-vacancy-status/{{ vacancy['ID_Vacancy'] }}">{% if vacancy.status == 'active' %}Desativar{% else %}Ativar{% endif %}</a>
-
-        </div>
-    
+            <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary col-12 col-sm-4 col-md-3" href="/delete-vacancy/{{ vacancy['ID_Vacancy'] }}">Excluir</a>
+            <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary col-12 col-sm-4 col-md-3" href="/edit-vacancy/{{ vacancy['ID_Vacancy'] }}">Editar</a>
+            <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary text-nowrap col-12 col-sm-6 col-md-4" onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-vacancy-status/{{ vacancy['ID_Vacancy'] }}">
+                {% if vacancy.status == 'active' %}Desativar{% else %}Ativar{% endif %}
+            </a>
+        </div>        
     </div>
     <div class="card-footer text-muted">{{ vacancy.salary }}</div>
-    </div>
 </div>

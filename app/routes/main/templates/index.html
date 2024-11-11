@@ -10,29 +10,20 @@
             <p class="fs-7 bg-dark p-2 text-light text-center rounded-6">É só pesquisar!</p>
         </div>
 
-        <hr>
+        <hr class="w-100">
 
-        <div class="col p-2 w-100">
-            <div class="row">
-
-                {% if not vacancies %}
-
+        <div class="row p-2 w-100">
+            {% if not vacancies %}
                 <h2 class="text-center my-5">Não há vagas!</h2>
-
-                {% else %}
-
+            {% else %}
                 {% for vacancy in vacancies %}
-
-                    <div class="card mt-4 col-12 col-md-6 col-lg-4 bg-light text-center">
-                        
-                        {% include 'components/vacancy-card.html' %}
-
+                    <div class="col-12 col-md-6 col-lg-4 mt-4">
+                        <div class="card shadow bg-light text-center w-100">
+                            {% include 'components/vacancy-card.html' %}
+                        </div>
                     </div>
-
                 {% endfor %}
-
-                {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
 

@@ -5,30 +5,27 @@ Login
 {% endblock %}
 
 {% block content %}
+<div class="d-flex justify-content-center align-items-center h-100 my-5">
+    <form method="post" action="/login" class="w-100 p-4 border rounded shadow" style="max-width: 28rem; margin: 0 auto;">
 
-<div class="h-100 w-100 d-flex align-items-center justify-content-center">
-    <form method="post" action="/login" class="d-flex justify-content-center flex-wrap m-5 w-100" style="width: 22rem;">
+        <h2 class="mb-4 text-center">Login</h2>
 
-        <h2 class="mb-4">Login</h2>
-
-        <div class="mb-3 w-100">
+        <div class="mb-3">
             <label for="email" class="form-label">Endereço de Email</label>
-            <input type="email" class="w-100 form-control" name="email" id="">
+            <input type="email" class="form-control" name="email">
         </div>
-    
-        <div class="mb-4 w-100">
+
+        <div class="mb-4">
             <label for="password" class="form-label">Senha</label>
             <input type="password" class="form-control" name="password">
         </div>
-        
-        <button type="submit" class="btn btn-primary">Acessar</button>
-    
+
+        <button type="submit" class="btn btn-primary w-100">Acessar</button>
+
         {% if errormsg %}
-        <p style="color: red;" class="w-100">{{ errormsg }}
-        </p>
+        <p class="text-danger mt-2">{{ errormsg }}</p>
         {% endif %}
 
     </form>
 </div>
-
 {% endblock %}

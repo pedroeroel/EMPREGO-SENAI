@@ -1,56 +1,61 @@
-<h1>EmpreGO</h1>
-<h2>Página do Administrador</h2>
-<p>Menu</p>
-<hr>
-<ul>
-    <li><a href="/new-company">Nova Empresa</a></li>
-    <li><a href="/logout">Sair</a></li>
-</ul>
+{% extends 'model.html' %}
 
-<h2>Empresas Ativas</h2>
+{% block title %}
+Página do Administrador
+{% endblock %}
 
-{%if not active_companies %}
-    <p>Não há empresas ativas.</p>
-{% else %}
-{% for a_company in active_companies %}
+{% block content %}
+<div class="p-5 container-fluid">
+    <h1 class="my-4">EmpreGO</h1>
+    <h2 class="mb-4">Página do Administrador</h2>
 
-<a href="/delete-company/{{ a_company['ID_Company'] }}"><button>Excluir</button></a>
-<a href="/edit-company/{{ a_company['ID_Company'] }}"><button>Editar</button></a>
-<a onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-company-status/{{ a_company['ID_Company'] }}"><button>Desativar</button></a>
+    <p>Menu</p>
+    <hr>
 
-<p>ID: {{ a_company['ID_Company'] }} - 
-    NOME: {{ a_company['name'] }} -
-    CNPJ: {{ a_company['cnpj'] }} -
-    TEL: {{ a_company['phone'] }} -
-    E-MAIL: {{ a_company['email'] }}
-</p>
+    <!-- Admin menu -->
+    <div class="mb-3">
+        <ul class="list-unstyled">
+            <li>
+                <div class="my-2 d-flex justify-content-start">
+                    <a class="link p-2 rounded-5 border border-1" href="/new-company">Nova Empresa</a>
+                </div>
+            </li>
+            <li>
+                <div class="my-2 d-flex justify-content-start">
+                    <a class="link p-2 rounded-5 border border-1" href="/logout">Sair</a>
+                </div>
+            </li>
+        </ul>
+    </div>
 
-{% endfor %}
-{% endif %}
+    <hr>
 
-<hr>
+    <!-- Active Companies Section -->
+    <h2 class="my-4">Empresas Ativas</h2>
 
-<h2>Empresas Inativas</h2>
+    {% if not active_companies %}
+        <p>Não há empresas ativas.</p>
+    {% else %}
+        <div class="row g-3">
+            {% for company in active_companies %}
+                {% include 'components/company-card.html' %}
+            {% endfor %}
+        </div>
+    {% endif %}
 
+    <hr>
 
-{%if not inactive_companies %}
+    <!-- Inactive Companies Section -->
+    <h2 class="my-4">Empresas Inativas</h2>
 
-<p>Não há empresas inativas.</p>
-
-{% else %}
-
-{% for in_company in inactive_companies %}
-
-<a href="/delete-company/{{ in_company['ID_Company'] }}"><button>Excluir</button></a>
-<a href="/edit-company/{{ in_company['ID_Company'] }}"><button>Editar</button></a>
-<a onclick="confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-company-status/{{ in_company['ID_Company'] }}"><button>Ativar</button></a>
-
-<p> ID: {{ in_company['ID_Company'] }} - 
-    NOME: {{ in_company['name'] }} -
-    CNPJ: {{ in_company['cnpj'] }} -
-    TEL: {{ in_company['phone'] }} -
-    E-MAIL: {{ in_company['email'] }}
-</p>
-
-{% endfor %}
-{% endif %}
+    {% if not inactive_companies %}
+        <p>Não há empresas inativas.</p>
+    {% else %}
+        <div class="row g-3">
+            {% for company in inactive_companies %}
+                {% include 'components/company-card.html' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Mulish', 'Montserrat', 'Rubik' ;
+    font-family: 'Mulish', 'Montserrat', 'Rubik';
     /* border: 1px solid black; */
 }
 
@@ -18,4 +18,16 @@ main .content {
 
 main .index {
     min-width: 90vw;
+}
+
+.card {
+    min-height: 350px; /* Set a minimum height */
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    flex-grow: 1; /* Ensures card content fills the available space */
+    white-space: normal;
+    overflow: hidden;
 }

@@ -1,17 +1,24 @@
+<div class="card">
     <div class="card-header">{{ vacancy.company }}</div>
     <div class="card-body">
-      <h5 class="card-title text-start"><strong>{{ vacancy.title }}</strong></h5>
-      <p class="card-text text-start fs-6 opacity-75">{{ vacancy.description | truncate(50) }}</p>
+        <h5 class="card-title text-start"><strong>{{ vacancy.title }}</strong></h5>
+        <p class="card-text text-start fs-6 opacity-75">{{ vacancy.description | truncate(50) }}</p>
 
-      <div class="row text-center justify-content-between">
-        
-        <p class="col-6 opacity-50 text-center text-md-start text-lg-start text-nowrap">
-          {{vacancy.type}} • {% if vacancy.arrangement == 'Remote' %}Remoto{% elif vacancy.arrangement == 'Hybrid' %}Híbrido{% else %}Presencial{% endif %}
-        </p>
+        <div class="row text-center justify-content-between">
+            <p class="col-12 col-md-6 opacity-50 text-center text-md-start text-nowrap">
+                {{ vacancy.type }} • 
+                {% if vacancy.arrangement == 'Remote' %}Remoto
+                {% elif vacancy.arrangement == 'Hybrid' %}Híbrido
+                {% else %}Presencial
+                {% endif %}
+            </p>
 
-        <a href="/vacancy-details/{{ vacancy.ID_Vacancy }}" class="btn col-4 w-100 btn-primary" data-mdb-ripple-init>detalhes</a>
-
-      </div>
+            <!-- Button for vacancy details -->
+            <a href="/vacancy-details/{{ vacancy.ID_Vacancy }}" class="btn btn-primary col-12 col-sm-6 col-md-4 w-100 mt-3" data-mdb-ripple-init>
+                Detalhes
+            </a>
+        </div>
     
     </div>
     <div class="card-footer text-muted">{{ vacancy.salary }}</div>
+</div>

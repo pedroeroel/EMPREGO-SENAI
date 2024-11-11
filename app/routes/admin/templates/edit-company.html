@@ -1,13 +1,42 @@
-<form action="/edit-company/{{id}}" method="post">
-    <label for="name">Nome da Empresa:</label>
-    <input value="{{company['name']}}" required type="text" name="name"><br>
-    <label for="cnpj">CNPJ:</label>
-    <input value="{{company['cnpj']}}" required type="number" maxlength=14 name="cnpj"><br>
-    <label for="phone">Telefone:</label>
-    <input value="{{company['phone']}}" required type="number" maxlength=11 name="phone"><br>
-    <label for="email">E-mail:</label>
-    <input value="{{company['email']}}" required type="email" name="email"><br>
-    <label for="password">Senha:</label>
-    <input value="{{company['password']}}" required type="text" name="password"><br>
-    <button type="submit">Edit</button>
-</form>
+{% extends 'model.html' %}
+
+{% block title %}
+    Editar Empresa
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-5">
+        <h1 class="my-4">Editar Empresa</h1>
+        <p>Preencha os campos abaixo para editar as informações da empresa.</p>
+        
+        <!-- Form for editing company -->
+        <form action="/edit-company/{{id}}" method="post" class="p-4 border border-1 rounded-3 shadow-sm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome da Empresa:</label>
+                <input value="{{company['name_Company']}}" required type="text" name="name" class="form-control">
+            </div>
+            
+            <div class="mb-3">
+                <label for="cnpj" class="form-label">CNPJ:</label>
+                <input value="{{company['cnpj']}}" required type="number" maxlength="14" name="cnpj" class="form-control">
+            </div>
+            
+            <div class="mb-3">
+                <label for="phone" class="form-label">Telefone:</label>
+                <input value="{{company['phone']}}" required type="number" maxlength="11" name="phone" class="form-control">
+            </div>
+            
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail:</label>
+                <input value="{{company['email']}}" required type="email" name="email" class="form-control">
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha:</label>
+                <input value="{{company['password']}}" required type="text" name="password" class="form-control">
+            </div>
+            
+            <button type="submit" class="btn btn-primary mt-3">Editar Empresa</button>
+        </form>
+    </div>
+{% endblock %}
