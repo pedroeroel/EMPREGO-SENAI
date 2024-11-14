@@ -1,12 +1,12 @@
 <div class="m-0 col-12 col-md-6 col-lg-4 mt-5">
 
-    <div class="card shadow bg-light text-center w-100">
+    <div class="card shadow bg-light text-center w-100" style="min-height: 400px;">
 
         <div class="card-header">{{ vacancy.company }}</div>
         
         <div class="card-body d-flex flex-column justify-content-between">
         
-            <h5 class="card-title text-start text-wrap"><strong>{{ vacancy.title | truncate(32)}}</strong></h5>
+            <h5 class="card-title text-start text-wrap"><strong>{{ vacancy.title}}</strong></h5>
             <p class="card-text text-start fs-6 opacity-75 text-md-nowrap">{{ vacancy.description | truncate(40) }}</p>
 
             <div class="row text-center justify-content-between">
@@ -26,7 +26,7 @@
                 {% endif %}
 
                 
-                <a href="/vacancy-details/{{ vacancy.ID_Vacancy }}" class="btn btn-primary col-12 col-sm-6 col-md-4 w-100 mt-3" data-mdb-ripple-init>
+                <a href="/vacancy-details/{{ vacancy.vacancyID }}" class="btn btn-primary col-12 col-sm-6 col-md-4 w-100 mt-3" data-mdb-ripple-init>
                     Detalhes
                 </a>
             </div>

@@ -2,16 +2,13 @@
 
 {% block title %}Detalhes da Vaga{% endblock %}
 
+{% block sessiontitle %}{{ vacancy.title }}{% endblock %}
+{% block sessionsubtitle %}{% if vacancy.salary %}{{vacancy.salary}}{% else %}Salário não especificado{% endif %}{% endblock %}
+
 {% block content %}
-    <div class="container-fluid p-5">
         <div class="flex-nowrap flex-column d-flex">
 
             {% if vacancy %}
-                    <!-- Job Title -->
-                    
-                    <h3><strong>{{ vacancy.title }}</strong></h3>
-                    
-                    <hr>
 
                     <!-- Job Description -->
 
@@ -37,20 +34,15 @@
                     </p>
                     
                     {% endif %}
-                    
-                    <!-- Job Salary if Avaiable -->
-                    
-                    <div class="">
-                        {% if vacancy.salary %}Salário: {{vacancy.salary}}{% else %}Salário não especificado.{% endif %}
-                    </div>
 
+                    
+                    {% if not session %}
+                    
                     <div class="my-3">
                         <h5>Como se candidatar:</h5>
                         <p class="text-start text-disabled">Para se candidatar a esta vaga, clique no botão abaixo e envie seu currículo.</p>
                     </div>
-                    
-                    {% if not session %}
-                    
+
                     <!-- Apply Button -->
                     
                     <a href="/apply/{{ vacancy.ID_Vacancy }}" 
@@ -67,6 +59,5 @@
 
             {% endif %}
         </div>
-    </div>
     {% endblock %}
     

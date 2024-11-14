@@ -60,13 +60,14 @@ def login():
             DB.stop(connection, cursor)
             return render_template('login.html', errormsg=error)
         
-        elif password == company['password'] and company['password'] == 'inactive':
+        elif password == company['password'] and company['status'] == 'inactive':
             error = 'Sua empresa está inativa!'
 
             DB.stop(connection, cursor)
             return render_template('login.html', errormsg=error)
         
         elif password == company['password']:
+
             session['email'] = email
             session['password'] = password
             session['companyInfo'] = company

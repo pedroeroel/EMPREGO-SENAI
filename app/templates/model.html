@@ -20,10 +20,10 @@
 
         <div class="content container-fluid bg-light shadow row justify-content-center px-3 py-5 p-md-5">
             
-            <div class="d-flex flex-wrap">
+            <div class="d-flex flex-wrap mb-2">
 
-                <p class="display-6 w-100">{% block sessiontitle %}Resultados para '{{ search }}'{% endblock %}</p>
-                <p class="fs-7 bg-dark p-2 text-light text-center rounded-6">{% block sessionsubtitle %}Veja os resultados abaixo!{% endblock %}</p>
+                <p class="display-6 w-100">{% block sessiontitle %}{% endblock %}</p>
+                <p class="fs-7 bg-dark p-2 mb-3 text-light text-center rounded-6">{% block sessionsubtitle %}{% endblock %}</p>
                 
                 {% if searchpage %}
                 <form class="d-flex mb-3 mb-md-4 input-group w-100" action="/search" method="get">
