@@ -19,10 +19,10 @@ def company_menu ():
     try:
 
         connection, cursor = DB.connect()
-        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'active' ORDER BY ID_Vacancy DESC", (company['ID_Company'],))
+        cursor.execute("SELECT * FROM vacancy WHERE companyID = %s AND status = 'active' ORDER BY vacancyID DESC", (company['companyID'],))
         activeVacancies = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM vacancy WHERE ID_Company = %s AND status = 'inactive' ORDER BY ID_Vacancy DESC", (company['ID_Company'],))
+        cursor.execute("SELECT * FROM vacancy WHERE companyID = %s AND status = 'inactive' ORDER BY vacancyID DESC", (company['companyID'],))
         inactiveVacancies = cursor.fetchall()
 
     except Exception as e:
@@ -62,16 +62,15 @@ def new_vancancy ():
     elif request.method == 'POST':
         
         company = session['companyInfo']
-        companyID = company['ID_Company']
+        companyID = company['companyID']
         vacancyTitle = request.form['title']
         vacancyDescription = request.form['description']
         vacancyArrangement = request.form['arrangement']
         vacancyType = request.form['type']
         vacancyLocation = request.form['location']
         vacancySalary = request.form['salary']
-        vacancyStatus = request.form ['status']
 
-        if not vacancyTitle or not vacancyDescription or not vacancyArrangement or not vacancyType or not vacancyLocation or not companyID or not vacancySalary or not vacancyStatus:
+        if not vacancyTitle or not vacancyDescription or not vacancyArrangement or not vacancyType or not vacancyLocation or not companyID or not vacancySalary:
             return render_template('new-vacancy.html', errormsg='All fields are obrigatory!')
         
         try:
@@ -79,9 +78,9 @@ def new_vancancy ():
 
             SQLstatement = '''
             INSERT INTO vacancy VALUES
-            (null, %s, %s, %s, %s, %s, %s, %s, %s) ;'''
+            (null, %s, %s, %s, %s, %s, %s, %s, 'active') ;'''
 
-            cursor.execute(SQLstatement, (vacancyTitle, vacancyDescription, vacancyArrangement, vacancyType, vacancyLocation, vacancySalary, companyID, vacancyStatus))
+            cursor.execute(SQLstatement, (vacancyTitle, vacancyDescription, vacancyArrangement, vacancyType, vacancyLocation, vacancySalary, companyID))
             connection.commit()
 
         except Exception as e:
@@ -105,12 +104,12 @@ def edit_vacancy (id):
         try:
             connection, cursor = DB.connect()
 
-            cursor.execute(f'SELECT * FROM vacancy WHERE ID_Vacancy = {id} ;')
+            cursor.execute(f'SELECT * FROM vacancy WHERE vacancyID = {id} ;')
             vacancy = cursor.fetchone()
 
             company = session['companyInfo']
 
-            if company['ID_Company'] != vacancy['ID_Company']:
+            if company['companyID'] != vacancy['companyID']:
                 return redirect('/company')
 
         except Exception as e:
@@ -148,7 +147,7 @@ def edit_vacancy (id):
             type = %s,
             location = %s,
             salary = %s
-            WHERE ID_Vacancy = %s;'''
+            WHERE vacancyID = %s;'''
 
             cursor.execute(SQLstatement, (vacancyTitle, vacancyDescription, vacancyArrangement, vacancyType, vacancyLocation, vacancySalary, id))
             connection.commit()
@@ -176,25 +175,25 @@ def switch_vacancy_status (id):
 
 
         connection, cursor = DB.connect()
-        cursor.execute('''SELECT * FROM vacancy WHERE ID_Vacancy = %s ;''', (id,))
+        cursor.execute('''SELECT * FROM vacancy WHERE vacancyID = %s ;''', (id,))
         vacancy = cursor.fetchone()
         
         company = session['companyInfo']
 
-        if vacancy['ID_Company'] != company['ID_Company']:
+        if vacancy['companyID'] != company['companyID']:
             return redirect('/company')
 
         elif vacancy['status'] == 'active':
 
             cursor.execute('''UPDATE vacancy
                 SET status = 'inactive' 
-                WHERE ID_Vacancy = %s ;''', (id,))
+                WHERE vacancyID = %s ;''', (id,))
 
         elif vacancy['status'] == 'inactive':
             
             cursor.execute('''UPDATE vacancy
                 SET status = 'active' 
-                WHERE ID_Vacancy = %s ;''', (id,))
+                WHERE vacancyID = %s ;''', (id,))
 
     except Exception as e:
         print(f'Back-End Error: {e}')
@@ -219,16 +218,16 @@ def delete_vacancy (id):
     try:
         connection, cursor = DB.connect()
 
-        cursor.execute('''SELECT * FROM vacancy WHERE ID_Vacancy = %s ;''', (id,))
+        cursor.execute('''SELECT * FROM vacancy WHERE vacancyID = %s ;''', (id,))
 
         vacancy = cursor.fetchone()
         company = session['companyInfo']
 
-        if vacancy['ID_Company'] != company['ID_Company']:
+        if vacancy['companyID'] != company['companyID']:
             return redirect('/company')
             
         else:
-            cursor.execute('''DELETE FROM vacancy WHERE ID_Vacancy = %s ;''', (id,))        
+            cursor.execute('''DELETE FROM vacancy WHERE vacancyID = %s ;''', (id,))        
 
     except Exception as e:
         print(f'Back-End Error: {e}')

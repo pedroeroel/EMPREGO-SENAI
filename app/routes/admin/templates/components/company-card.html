@@ -2,23 +2,26 @@
 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
     <div class="card w-100 shadow-sm">
         <div class="card-body">
-            <h5 class="card-title text-start"><strong>{{ company['name_Company'] }}</strong></h5>
+            <h5 class="card-title text-start"><strong>{{ company['name'] }}</strong></h5>
             <p class="card-text text-start fs-6 opacity-75">CNPJ: {{ company['cnpj'] }}</p>
             <p class="card-text text-start fs-6 opacity-75">TEL: {{ company['phone'] }}</p>
             <p class="card-text text-start fs-6 opacity-75">E-MAIL: {{ company['email'] }}</p>
             
             <div class="row text-center justify-content-center g-3 flex-wrap">
+
                 <!-- Excluir Button -->
-                <a class="p-2 rounded-5 mx-2 border border-1 btn btn-danger col-12 col-sm-4 col-md-3" href="/delete-company/{{ company['ID_Company'] }}">Excluir</a>
-                
+                {% if company.status == 'inactive' %}
+                <a class="p-2 rounded-5 mx-2 border border-1 btn btn-danger col-12 col-sm-4 col-md-3" onclick='confirm("Tem certeza que quer excluir a empresa {{ company.name }}?")' href="/delete-company/{{ company['companyID'] }}">Excluir</a>
+                {% endif %}
+
                 <!-- Editar Button -->
-                <a class="p-2 rounded-5 mx-2 border border-1 btn btn-warning col-12 col-sm-4 col-md-3" href="/edit-company/{{ company['ID_Company'] }}">Editar</a>
+                <a class="p-2 rounded-5 mx-2 border border-1 btn btn-warning col-12 col-sm-4 col-md-3" href="/edit-company/{{ company['companyID'] }}">Editar</a>
                 
                 <!-- Desativar / Ativar Button -->
                 {% if company['status'] == 'active' %}
-                    <a class="p-2 rounded-5 mx-2 border border-1 btn btn-secondary col-12 col-sm-6 col-md-4" onclick="return confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-company-status/{{ company['ID_Company'] }}">Desativar</a>
+                    <a class="p-2 rounded-5 mx-2 border border-1 btn btn-secondary col-12 col-sm-6 col-md-4" onclick="return confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-company-status/{{ company['companyID'] }}">Desativar</a>
                 {% else %}
-                    <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary col-12 col-sm-6 col-md-4" onclick="return confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-company-status/{{ company['ID_Company'] }}">Ativar</a>
+                    <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary col-12 col-sm-6 col-md-4" onclick="return confirm('Tem certeza de que quer ativar esta empresa?')" href="/switch-company-status/{{ company['companyID'] }}">Ativar</a>
                 {% endif %}
             </div>
         </div>

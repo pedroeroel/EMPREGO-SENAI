@@ -13,7 +13,7 @@ def index():
         connection, cursor = DB.connect()
 
         cursor.execute('''
-            SELECT v.*, c.name_Company as company FROM vacancy v JOIN company c ON v.ID_Company = c.ID_Company WHERE v.status = 'active';''')    
+            SELECT v.*, c.name as company FROM vacancy v JOIN company c ON v.companyID = c.companyID WHERE v.status = 'active';''')    
         vacancies = cursor.fetchall()
 
     except Error as e:
@@ -45,7 +45,7 @@ def search ():
         search_term = f'%{search}%'
 
         cursor.execute('''
-            SELECT v.*, c.name_Company as company FROM vacancy v JOIN company c ON v.ID_Company = c.ID_Company WHERE v.status = 'active' AND v.title LIKE %s OR v.description LIKE %s OR v.location LIKE %s;''', (search_term, search_term, search_term)) 
+            SELECT v.*, c.name as company FROM vacancy v JOIN company c ON v.companyID = c.companyID WHERE v.status = 'active' AND v.title LIKE %s OR v.description LIKE %s OR v.location LIKE %s OR c.name LIKE %s;''' , (search_term, search_term, search_term, search_term)) 
         vacancies = cursor.fetchall()
 
     except Error as e:
@@ -65,13 +65,13 @@ def search ():
         DB.stop(connection, cursor)
 
         if not vacancies:
-            return render_template('search.html', search=search)
+            return render_template('search.html', search=search, searchpage=True)
         else:
             for vacancy in vacancies:  
                 salary = float(vacancy['salary'])
                 vacancy['salary'] = locale.currency(salary, grouping=True)
 
-            return render_template('search.html', vacancies=vacancies, search=search)
+            return render_template('search.html', vacancies=vacancies, search=search, searchpage=True)
         
 @main.route('/vacancy-details/<int:id>')
 def vacancy_details (id):
@@ -82,7 +82,7 @@ def vacancy_details (id):
         connection, cursor = DB.connect()
 
         cursor.execute('''
-            SELECT v.*, c.name_Company as company FROM vacancy v JOIN company c ON v.ID_Company = c.ID_Company WHERE ID_Vacancy = %s;''', (id,))    
+            SELECT v.*, c.name as company FROM vacancy v JOIN company c ON v.companyID = c.companyID WHERE vacancyID = %s;''', (id,))    
         vacancy = cursor.fetchall()
 
     except Error as e:

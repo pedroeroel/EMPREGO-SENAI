@@ -14,13 +14,13 @@ def admin_menu():
     try:
         connection, cursor = DB.connect()
         SQLstatement = '''
-            SELECT * FROM company WHERE status = 'active' ;
+            SELECT * FROM company WHERE status = 'active' ORDER BY name ASC ;
             '''
         cursor.execute(SQLstatement)
         active_companies = cursor.fetchall()
         
         SQLstatement = '''
-            SELECT * FROM company WHERE status = 'inactive' ;
+            SELECT * FROM company WHERE status = 'inactive' ORDER BY name ASC ;
             '''
         cursor.execute(SQLstatement)
         inactive_companies = cursor.fetchall()
@@ -82,7 +82,7 @@ def edit_company (id):
         try:
             connection, cursor = DB.connect()
 
-            cursor.execute(f'SELECT * FROM company WHERE ID_Company = {id} ;')
+            cursor.execute(f'SELECT * FROM company WHERE companyID = {id} ;')
             company = cursor.fetchone()
 
         except Exception as e:
@@ -113,12 +113,12 @@ def edit_company (id):
 
             SQLstatement = '''
             UPDATE company
-            SET name_Company = %s,
+            SET name = %s,
             cnpj = %s,
             phone = %s,
             email = %s,
             password = %s
-            WHERE ID_Company = %s;'''
+            WHERE companyID = %s;'''
 
             cursor.execute(SQLstatement, (companyName, companyCNPJ, companyPhoneNumber, companyEmail, companyPassword, id))
             connection.commit()
@@ -140,7 +140,7 @@ def switch_company_status (id):
 
     try:
         connection, cursor = DB.connect()
-        cursor.execute('''SELECT * FROM company WHERE ID_Company = %s ;''', (id,))
+        cursor.execute('''SELECT * FROM company WHERE companyID = %s ;''', (id,))
         
         company = cursor.fetchone()
 
@@ -148,17 +148,17 @@ def switch_company_status (id):
 
             cursor.execute('''UPDATE company
                         SET status = 'inactive' 
-                        WHERE ID_Company = %s ;''', (id,))
+                        WHERE companyID = %s ;''', (id,))
             
             cursor.execute('''UPDATE vacancy
                 SET status = 'inactive' 
-                WHERE ID_Company = %s ;''', (id,))
+                WHERE companyID = %s ;''', (id,))
 
         elif company['status'] == 'inactive':
             
             cursor.execute('''UPDATE company
                 SET status = 'active' 
-                WHERE ID_Company = %s ;''', (id,))
+                WHERE companyID = %s ;''', (id,))
 
     except Exception as e:
         print(f'Back-End Error: {e}')
@@ -182,8 +182,8 @@ def delete_company (id):
     try:
         connection, cursor = DB.connect()
 
-        cursor.execute('''DELETE FROM vacancy WHERE ID_Company = %s ;''', (id,))        
-        cursor.execute('''DELETE FROM company WHERE ID_Company = %s ;''', (id,))
+        cursor.execute('''DELETE FROM vacancy WHERE companyID = %s ;''', (id,))        
+        cursor.execute('''DELETE FROM company WHERE companyID = %s ;''', (id,))
 
     except Exception as e:
         print(f'Back-End Error: {e}')

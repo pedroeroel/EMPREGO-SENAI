@@ -4,78 +4,66 @@
 
 {% block content %}
     <div class="container-fluid p-5">
-        <div class="row justify-content-center">
+        <div class="flex-nowrap flex-column d-flex">
 
             {% if vacancy %}
-            <div class="col-12 col-md-8 col-lg-6">
-                <!-- Vacancy Detail Card -->
-                <div class="card shadow-sm">
-                    <!-- Card Header -->
-                    <div class="card-header bg-primary text-light text-center py-4">
-                        <h4 class="m-0">{{ vacancy.company }}</h4>
+                    <!-- Job Title -->
+                    
+                    <h3><strong>{{ vacancy.title }}</strong></h3>
+                    
+                    <hr>
+
+                    <!-- Job Description -->
+
+                    <p class="opacity-75">
+                        {{ vacancy.description }}
+                    </p>
+
+                    
+                    
+                    
+                    <!-- Job Location If Avaiable -->
+                    
+                    {% if vacancy.location %}
+                    
+                    <div class="opacity-75 my-2 my-md-3">
+                        <i class="bi bi-geo-alt-fill me-1"></i>{{ vacancy.location }}
                     </div>
-
-                    <!-- Card Body with all the vacancy details -->
-                    <div class="card-body">
-                        <!-- Job Title -->
-                        <h3 class="card-title text-start"><strong>{{ vacancy.title }}</strong></h3>
-                        
-                        <!-- Job Description -->
-                        <p class="card-text text-start fs-6 opacity-75 mb-4">
-                            {{ vacancy.description }}
-                        </p>
-
-                        <!-- Job Type and Arrangement -->
-                        <div class="row text-center justify-content-between mb-4">
-                            <p class="col-12 col-md-6 text-start text-md-start opacity-75">
-                                {{ vacancy.type }} • 
-                                {% if vacancy.arrangement == 'Remote' %}Remoto
-                                {% elif vacancy.arrangement == 'Hybrid' %}Híbrido
-                                {% else %}Presencial
-                                {% endif %}
-                            </p>
-                        </div>
-                        
-                        <!-- Location (if available) -->
-                        {% if vacancy.location %}
-                            <div class="text-start opacity-75 mb-3">
-                                <i class="bi bi-geo-alt-fill me-1"></i>{{ vacancy.location }}
-                            </div>
-                        {% endif %}
-                        
-                        
-                        <!-- How to Apply -->
-                        <div class="mb-4">
-                            <h5>Como se candidatar:</h5>
-                            <p class="text-start">Para se candidatar a esta vaga, clique no botão abaixo e envie seu currículo.</p>
-                        </div>
-                        
-                        {% if not session %}
-                        <!-- Apply Button -->
-                        <a href="/apply/{{ vacancy.ID_Vacancy }}" 
-                        class="btn btn-success w-100" 
-                        data-mdb-ripple-init>
-                        Candidatar-se
-                    </a>
-                </div>
-                {% endif %}
-
-                    <!-- Card Footer with the job salary -->
-                    {% if vacancy.salary %}
-                        <div class="card-footer text-center opacity-75">
-                            <i class="bi bi-currency-real me-1"></i>{{vacancy.salary}}
-                        </div>
-                    {% else %}
-                        <div class="card-footer text-center opacity-75">
-                            <i class="bi bi-currency-real me-1"></i>Não especificado
-                        </div>
+                    
+                    <!-- Job Type and Arrangement -->
+                    
+                    <p class="opacity-75">
+                        {{ vacancy.type }} • {% if vacancy.arrangement == 'Remote' %}Remoto{% elif vacancy.arrangement == 'Hybrid' %}Híbrido{% else %}Presencial{% endif %}
+                    </p>
+                    
                     {% endif %}
+                    
+                    <!-- Job Salary if Avaiable -->
+                    
+                    <div class="">
+                        {% if vacancy.salary %}Salário: {{vacancy.salary}}{% else %}Salário não especificado.{% endif %}
                     </div>
-                </div>
-            </div>
+
+                    <div class="my-3">
+                        <h5>Como se candidatar:</h5>
+                        <p class="text-start text-disabled">Para se candidatar a esta vaga, clique no botão abaixo e envie seu currículo.</p>
+                    </div>
+                    
+                    {% if not session %}
+                    
+                    <!-- Apply Button -->
+                    
+                    <a href="/apply/{{ vacancy.ID_Vacancy }}" 
+                    class="btn btn-success" 
+                    data-mdb-ripple-init>
+                    Candidatar-se
+                    </a>
+
+                    {% endif %}
 
             {% else %}
-            <h4 class="text-center">Vaga Inválida!</h4>
+
+                <h4 class="text-center">Vaga Inválida!</h4>
 
             {% endif %}
         </div>

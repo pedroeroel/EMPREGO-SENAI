@@ -1,30 +1,30 @@
 {% extends 'model.html' %}
 
-{% block title %}Página Inicial{% endblock%}
+{% block title %}Página Inicial{% endblock %}
+
+{% block sessiontitle %}Encontre a vaga perfeita para você!{% endblock %}
+{% block sessionsubtitle %}É só pesquisar!{% endblock %}
 
 {% block content %}
 
-    <div class="index container-fluid p-5">
-        <div class="d-flex flex-wrap w-100 justify-content-start">
-            <p class="display-6 w-100">Encontre a vaga perfeita para você!</p>
-            <p class="fs-7 bg-dark p-2 text-light text-center rounded-6">É só pesquisar!</p>
-        </div>
+    <div class="row p-0 p-md-2 p-lg-2 g-sm-0 g-md-4">
 
-        <hr class="w-100">
+        <!-- VACANCY CARDS -->
 
-        <div class="row p-2 w-100">
-            {% if not vacancies %}
-                <h2 class="text-center my-5">Não há vagas!</h2>
-            {% else %}
-                {% for vacancy in vacancies %}
-                    <div class="col-12 col-md-6 col-lg-4 mt-4">
-                        <div class="card shadow bg-light text-center w-100">
-                            {% include 'components/vacancy-card.html' %}
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+        {% if not vacancies %}
+    
+            <h2 class="text-center my-5">Não há vagas!</h2>
+    
+        {% else %}
+
+            {% for vacancy in vacancies %}
+
+                    {% include 'components/vacancy-card.html' %}
+
+            {% endfor %}
+
+        {% endif %}
+
     </div>
 
 {% endblock %}
