@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Arquivos</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+    <div class="file-list-container">
+        <a href="/upload"><button>Novo arquivo</button></a>
+        <h2>Arquivos na Pasta de Uploads</h2>
+        <ul>
+            {% for arquivo in arquivos %}
+            <li>
+                {{ arquivo.idarquivo}} - {{ arquivo.nomearquivo }} - {{ arquivo.data_upload }}
+                <a href="/download/{{arquivo.nomearquivo}}" class="download" target="_blank">Download</a>
+                <a href="/delete/{{arquivo.nomearquivo}}" class="excluir">Excluir</a>
+            </li>
+            {% else %}
+                <p>Nenhum arquivo encontrado.</p>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
