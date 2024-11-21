@@ -4,28 +4,46 @@
 Login
 {% endblock %}
 
+{% block sessiontitle %}Faça seu login!{% endblock %}
+{% block sessionsubtitle %}Acesse sua conta{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center align-items-center h-100 my-5">
-    <form method="post" action="/login" class="w-100 p-4 border rounded shadow" style="max-width: 28rem; margin: 0 auto;">
+    <form method="post" action="/login" class="needs-validation row justify-content-center" style="max-width: 50rem;" novalidate>
 
-        <h2 class="mb-4 text-center">Login</h2>
-
-        <div class="mb-3">
+        <div class="my-4 col-12">
             <label for="email" class="form-label">Endereço de Email</label>
             <input type="email" class="form-control" name="email">
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4 col-12">
             <label for="password" class="form-label">Senha</label>
             <input type="password" class="form-control" name="password">
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Acessar</button>
+        <div class="col-12 col-lg-6"><button type="submit" class="btn btn-primary w-100">Acessar</button></div>
 
         {% if errormsg %}
         <p class="text-danger mt-2">{{ errormsg }}</p>
         {% endif %}
 
     </form>
-</div>
+
+<script>        (() => {
+    'use strict'
+  
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+  
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+  
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()</script>
 {% endblock %}

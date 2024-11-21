@@ -4,39 +4,55 @@
     Editar Empresa
 {% endblock %}
 
+{% block sessiontitle %}Edite a empresa{% endblock %}
+{% block sessionsubtitle %}Atualize os dados{% endblock %}
+
 {% block content %}
-    <div class="container-fluid p-5">
-        <h1 class="my-4">Editar Empresa</h1>
-        <p>Preencha os campos abaixo para editar as informações da empresa.</p>
+
+    <!-- Form for editing company -->
+
+    <form action="/edit-company/{{id}}" method="post" class="row">
+        <div class="mb-3 col-12 col-lg-6">
+            <label for="name" class="form-label">Nome da Empresa:</label>
+            <input value="{{company['name']}}" required type="text" name="name" class="form-control">
+        </div>
         
-        <!-- Form for editing company -->
-        <form action="/edit-company/{{id}}" method="post" class="p-4 border border-1 rounded-3 shadow-sm">
-            <div class="mb-3">
-                <label for="name" class="form-label">Nome da Empresa:</label>
-                <input value="{{company['name']}}" required type="text" name="name" class="form-control">
-            </div>
-            
-            <div class="mb-3">
-                <label for="cnpj" class="form-label">CNPJ:</label>
-                <input value="{{company['cnpj']}}" required type="number" maxlength="14" name="cnpj" class="form-control">
-            </div>
-            
-            <div class="mb-3">
-                <label for="phone" class="form-label">Telefone:</label>
-                <input value="{{company['phone']}}" required type="number" maxlength="11" name="phone" class="form-control">
-            </div>
-            
-            <div class="mb-3">
-                <label for="email" class="form-label">E-mail:</label>
-                <input value="{{company['email']}}" required type="email" name="email" class="form-control">
-            </div>
-            
-            <div class="mb-3">
-                <label for="password" class="form-label">Senha:</label>
-                <input value="{{company['password']}}" required type="text" name="password" class="form-control">
-            </div>
-            
-            <button type="submit" class="btn btn-primary mt-3">Editar Empresa</button>
-        </form>
-    </div>
+        <div class="mb-3 col-12 col-md-6 col-lg-3">
+            <label for="cnpj" class="form-label">CNPJ:</label>
+            <input value="{{company['cnpj']}}" id="cnpj" required type="text" placeholder="00.000.000/0000-00" name="cnpj" class="form-control">
+        </div>
+        
+        <div class="mb-3 col-12 col-md-6 col-lg-3">
+            <label for="phone" class="form-label">Telefone:</label>
+            <input value="{{company['phone']}}" id="phoneNumber" required type="text" name="phone" class="form-control">
+        </div>
+        
+        <div class="mb-3 col-12 col-lg-6">
+            <label for="email" class="form-label">E-mail:</label>
+            <input value="{{company['email']}}" required type="email" name="email" class="form-control">
+        </div>
+        
+        <div class="mb-3 col-12 col-lg-6">
+            <label for="password" class="form-label">Senha:</label>
+            <input value="{{company['password']}}" required type="text" name="password" class="form-control">
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-3">Editar Empresa</button>
+    </form>
+    
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
+    <script>
+        Inputmask('99.999.999/9999-99').mask(document.getElementById('cnpj'))
+        Inputmask('999.999.999-99').mask(document.getElementById('cpf'))
+        Inputmask('99 99999-9999').mask(document.getElementById('phoneNumber'))
+        Inputmask('numeric',{
+            radixPoint: ",",
+            groupSeparator: ".",
+            digits: 2,
+            autoGroup: true,
+            rightAlign: false,
+            allowMinus: false,
+            prefix: "R$ "
+        }).mask(document.getElementById('salary'))
+    </script>
 {% endblock %}

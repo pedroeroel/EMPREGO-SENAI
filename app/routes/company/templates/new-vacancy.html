@@ -3,53 +3,83 @@
 {% block title %}
 Nova Vaga
 {% endblock %}
+{% block sessiontitle %}Cadastre uma nova vaga!{% endblock %}
+{% block sessionsubtitle %}Digite abaixo as informações{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center h-100 my-5">
-    <form action="/new-vacancy" method="post" class="w-100 p-4 border rounded shadow" style="max-width: 28rem; margin: 0 auto;">
+<form action="/new-vacancy" method="post" class="w-100 p-4 needs-validation" novalidate>
+    <div class="row">
 
-        <h2 class="mb-4 text-center">Nova Vaga</h2>
-
-        <div class="mb-3">
+        <div class="mb-3 col-12 col-lg-8">
             <label for="title" class="form-label">Título da Vaga</label>
-            <input required type="text" name="title" class="form-control">
+            <input required type="text" placeholder="Ex. Diretor de Marketing" name="title" class="form-control">
+            <div class="valid-feedback">Ótimo!</div>
+            <div class="invalid-feedback">Insira o título da vaga!</div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 col-12">
             <label for="description" class="form-label">Descrição</label>
-            <input required type="text" name="description" class="form-control">
+            <textarea required type="text" placeholder="Ex. Coordenar o time de Marketing." name="description" class="form-control"></textarea>
+            <div class="valid-feedback">Perfeito!</div>
+            <div class="invalid-feedback">Insira uma descrição.</div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 col-12 col-md-6">
             <label for="arrangement" class="form-label">Modalidade</label>
             <select required name="arrangement" class="form-control">
-                <option selected>Selecione uma modalidade</option>
                 <option value="Onsite">Presencial</option>
                 <option value="Hybrid">Híbrido</option>
                 <option value="Remote">Remoto</option>
             </select>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 col-12 col-md-6">
             <label for="type" class="form-label">Tipo de Vaga</label>
             <select required name="type" class="form-control">
-                <option selected>Selecione um tipo</option>
                 <option value="PJ">PJ</option>
                 <option value="CLT">CLT</option>
             </select>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 col-12 col-md-10">
             <label for="location" class="form-label">Localização</label>
-            <input type="text" required name="location" class="form-control">
+            <input type="text" placeholder="Endereço completo ou apenas cidade (Ex. Florianópolis)" required name="location" class="form-control">
+            <div class="valid-feedback">Ótimo!</div>
+            <div class="invalid-feedback">Insira a localização!</div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 col-12 col-md-2">
             <label for="salary" class="form-label">Salário</label>
-            <input type="number" required name="salary" class="form-control">
+            <input type="number" placeholder="Ex. 5450" required id="salary" name="salary" class="form-control">
+            <div class="valid-feedback">Boa!</div>
+            <div class="invalid-feedback">Insira um salário!</div>
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
-    </form>
-</div>
+        <div class="mt-3 col-12 col-md-6">
+            <button type="submit" class="btn w-100 btn-primary">Cadastrar</button>
+        </div>
+
+    </div>
+</form>
+
+<script>
+    (() => {
+        'use strict'
+      
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+      
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+      
+            form.classList.add('was-validated')
+          }, false)
+        })
+      })()
+</script>
 {% endblock %}

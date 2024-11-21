@@ -1,13 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, session, send_from_directory
 from ...db_functions import DB
-import locale
 from mysql.connector import *
 import time
 import os
+import locale
+
 
 main = Blueprint('main', __name__, template_folder='templates')
-main.config['UPLOAD_FOLDER'] = os.path.join(main.root_path, '../../uploads/')
-os.makedirs(main.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @main.route('/')
 def index():
@@ -28,11 +27,12 @@ def index():
 
     finally:
 
-        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
+        locale.setlocale(locale.LC_ALL, 'pt-BR.UTF-8')
 
         for vacancy in vacancies:
             salary = float(vacancy['salary'])
-            vacancy['salary'] = locale.currency(salary, grouping=True)
+            salary = locale.currency(salary, grouping=True)
+            vacancy['salary'] = salary
 
         DB.stop(connection, cursor)
 
@@ -64,16 +64,18 @@ def search ():
 
     finally:
 
-        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
+        locale.setlocale(locale.LC_ALL, 'pt-BR.UTF-8')
+
+        for vacancy in vacancies:
+            salary = float(vacancy['salary'])
+            salary = locale.currency(salary, grouping=True)
+            vacancy['salary'] = salary
 
         DB.stop(connection, cursor)
 
         if not vacancies:
             return render_template('search.html', search=search, searchpage=True)
         else:
-            for vacancy in vacancies:  
-                salary = float(vacancy['salary'])
-                vacancy['salary'] = locale.currency(salary, grouping=True)
 
             return render_template('search.html', vacancies=vacancies, search=search, searchpage=True)
         
@@ -82,37 +84,34 @@ def vacancy_details (id):
 
     try:
 
-
         connection, cursor = DB.connect()
 
         cursor.execute('''
             SELECT v.*, c.name as company FROM vacancy v JOIN company c ON v.companyID = c.companyID WHERE vacancyID = %s;''', (id,))    
-        vacancy = cursor.fetchall()
+        vacancy = cursor.fetchone()
+
+        locale.setlocale(locale.LC_ALL, 'pt-BR.UTF-8')
+
+        vacancy['salary'] = locale.currency(float(vacancy['salary']), grouping=True)
+
+        return render_template('detailed-vacancy.html', vacancy=vacancy)
 
     except Error as e:
         print(f'DB Error: {e}')
-
+        
     except Exception as e:
         print(f'Back-End Error: {e}')
 
+
     finally:
-
-        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
-
-        if not vacancy:
-            return redirect('/')
-        else:
-            for info in vacancy:
-                salary = float(info['salary'])
-                info['salary'] = locale.currency(salary, grouping=True)
-                vacancy = vacancy[0]
 
         DB.stop(connection, cursor)
 
-    return render_template('detailed-vacancy.html', vacancy=vacancy)
+        if not vacancy:
+            return redirect('/')
 
-@main.route('/upload', methods=['GET','POST'])
-def upload():
+@main.route('/upload/<int:id>', methods=['GET','POST'])
+def upload (id):
     if request.method == 'GET':
         return render_template('upload.html')
     
@@ -130,8 +129,12 @@ def upload():
             fileName = f'{timestamp}_{file.filename}'
             file.save(os.path.join(main.config['UPLOAD_FOLDER'], fileName))
 
+            name = request.form['name']
+            email = request.form['email']
+            phone = request.form['phone']
+
             connection, cursor = DB.connect()
-            cursor.execute("INSERT INTO apply (name, email, phone, fileName, vacancyID) VALUES (%s, %s, %s, %s, %s)", (name, email, phone, fileName, vacancyID))
+            cursor.execute("INSERT INTO apply (name, email, phone, fileName, vacancyID) VALUES (%s, %s, %s, %s, %s)", (name, email, phone, fileName, id))
             
             connection.commit()
             

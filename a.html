@@ -1,0 +1,14 @@
+<div class="upload-container">
+    <h2>Envie seu arquivo</h2>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Enviar Arquivo</button>
+    </form>
+    
+    {% if msg %}
+
+    <div class="mensagem" style="margin-top: 10px;">
+        <p>{{ msg }}</p>
+    </div>
+
+    {% endif %}

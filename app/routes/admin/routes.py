@@ -51,8 +51,11 @@ def new_company ():
         companyPassword = request.form['password']
 
         if not companyName or not companyEmail or not companyCNPJ or not companyPhoneNumber or not companyPassword:
-            return render_template('new-company.html', errormsg='All fields are obrigatory!')
+            return render_template('new-company.html', errormsg='Todos os campos são obrigatórios!')
         
+        elif len(companyCNPJ) != 14:
+            return render_template('new-company.html', errormsg='O CNPJ precisa ter 14 algarismos.')
+
         try:
             connection, cursor = DB.connect()
 
@@ -104,12 +107,19 @@ def edit_company (id):
         companyCNPJ = request.form['cnpj']
         companyPhoneNumber = request.form['phone']
         companyPassword = request.form['password']
+        
+        connection, cursor = DB.connect()
+
+        cursor.execute(f'SELECT * FROM company WHERE companyID = {id} ;')
+        company = cursor.fetchone()
 
         if not companyName or not companyEmail or not companyCNPJ or not companyPhoneNumber or not companyPassword:
-            return render_template('edit-company.html', errormsg='Todos os campos são obrigatórios!')
+            return render_template('edit-company.html', company=company, id=id, errormsg='Todos os campos são obrigatórios!')
+        
+        elif len(companyCNPJ) != 14:
+            return render_template('edit-company.html', company=company, id=id, errormsg='O CNPJ precisa ter 14 algarismos.')
         
         try:
-            connection, cursor = DB.connect()
 
             SQLstatement = '''
             UPDATE company
@@ -125,6 +135,13 @@ def edit_company (id):
 
         except Exception as e:
             print(f'Error: {e}')
+
+            return render_template('edit-company.html', errormsg='Algo deu errado.')
+
+        except Error as e:
+            print(f'DB Error: {e}')
+
+            return render_template('edit-company.html', errormsg='Algo deu errado.')
     
         finally:
             DB.stop(connection, cursor)

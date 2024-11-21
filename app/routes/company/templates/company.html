@@ -1,23 +1,10 @@
 {% extends 'model.html' %}
 {% block title %}Empresa{% endblock %}
 
+{% block sessiontitle %}Seja bem-vindo {{ company.name }}!{% endblock %}
+{% block sessionsubtitle %}CNPJ: {{ company.cnpj }}{% endblock %}
+
 {% block content %}
-<div class="container-fluid p-5">
-    <!-- Introductory Section -->
-    <div class="d-flex flex-wrap w-100 justify-content-start">
-        <p class="display-6 w-100">Encontre a vaga perfeita para você!</p>
-        <p class="fs-7 bg-dark p-2 text-light text-center rounded-6">É só pesquisar!</p>
-    </div>
-
-    <hr class="w-100">
-
-    <!-- Company Information -->
-    <div class="mb-2">
-        <h2 class="w-100">{{ company.name_Company }}</h2>
-        <p class="w-100">CNPJ: {{ company.cnpj }}</p>
-    </div>
-
-    <hr class="w-100">
 
     <!-- Button to Create New Vacancy -->
     <div class="my-2 d-flex justify-content-start">
@@ -60,4 +47,6 @@
         {% endif %}
     </div>
 </div>
+
+
 {% endblock %}

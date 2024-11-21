@@ -4,11 +4,9 @@ import time
 from ...config import *
 from ...db_functions import *
 from mysql.connector import *
-import locale
 
 company = Blueprint('company', __name__, template_folder='templates')
-company.config['UPLOAD_FOLDER'] = os.path.join(company.root_path, '../../uploads/')
-os.makedirs(company.config['UPLOAD_FOLDER'], exist_ok=True)
+
 
 @company.route('/company')
 def company_menu ():
@@ -35,19 +33,7 @@ def company_menu ():
     except Error as e:
         print(f'DB Error: {e}')
 
-    finally:
-
-        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
-
-        for vacancy in inactiveVacancies:
-            salary = float(vacancy['salary'])
-            vacancy['salary'] = locale.currency(salary, grouping=True)
-
-        locale.setlocale ( locale.LC_ALL, 'pt_BR.UTF-8' )
-
-        for vacancy in activeVacancies:
-            salary = float(vacancy['salary'])
-            vacancy['salary'] = locale.currency(salary, grouping=True)
+    finally:       
 
         DB.stop(connection, cursor)
 
@@ -75,7 +61,7 @@ def new_vancancy ():
         vacancySalary = request.form['salary']
 
         if not vacancyTitle or not vacancyDescription or not vacancyArrangement or not vacancyType or not vacancyLocation or not companyID or not vacancySalary:
-            return render_template('new-vacancy.html', errormsg='All fields are obrigatory!')
+            return render_template('new-vacancy.html', errormsg='Todos os campos são obrigatórios!')
         
         try:
             connection, cursor = DB.connect()

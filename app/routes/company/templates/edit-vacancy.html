@@ -4,9 +4,12 @@
 Editar Vaga
 {% endblock %}
 
+{% block sessiontitle %}Editar Vaga{% endblock %}
+{% block sessionsubtitle %}Atualize os dados{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-center align-items-center h-100 my-5">
-    <form action="/edit-vacancy/{{ id }}" method="post" class="w-100 p-4 border rounded shadow" style="max-width: 28rem; margin: 0 auto;">
+    <form action="/edit-vacancy/{{ id }}" method="post" class="w-100 p-4 border rounded shadow needs-validation" novalidate style="max-width: 28rem; margin: 0 auto;">
 
         <h2 class="mb-4 text-center">Editar Vaga</h2>
 
@@ -59,10 +62,52 @@ Editar Vaga
 
         <div class="mb-3">
             <label for="salary" class="form-label">Salário</label>
-            <input value="{{ vacancy['salary'] }}" required type="number" name="salary" class="form-control">
+            <input value="{{ vacancy['salary'] }}" id="currencyReal" required type="text" name="salary" class="form-control">
         </div>
 
         <button type="submit" class="btn btn-primary w-100">Salvar</button>
     </form>
 </div>
+
+<script src="https://unpkg.com/imask"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Imask(document.getElementById('phoneNumber'), {
+            mask: "11 11111-1111"
+        })
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {
+        Imask(document.getElementById('cnpj'), {
+            mask: '11.111.111/1111-11'
+        })
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {  
+        Imask(document.getElementById('cpf'), {
+            mask: '111.111.111-11'
+        })
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {  
+        Imask(document.getElementById('currencyReal'),
+        {
+            mask: 'R$ num',
+            
+            blocks: {
+                num: {
+                    mask: Number,
+                    thousandsSeparator: '.',
+                    scale: 2,
+                    radix: ',',
+                    min: 0
+                }
+            }
+        })
+    })
+
+</script>
+
+
 {% endblock %}
