@@ -1,9 +1,13 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, send_from_directory
 from ...db_functions import DB
 import locale
-from mysql.connector import Error
+from mysql.connector import *
+import time
+import os
 
 main = Blueprint('main', __name__, template_folder='templates')
+main.config['UPLOAD_FOLDER'] = os.path.join(main.root_path, '../../uploads/')
+os.makedirs(main.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @main.route('/')
 def index():
@@ -106,3 +110,45 @@ def vacancy_details (id):
         DB.stop(connection, cursor)
 
     return render_template('detailed-vacancy.html', vacancy=vacancy)
+
+@main.route('/upload', methods=['GET','POST'])
+def upload():
+    if request.method == 'GET':
+        return render_template('upload.html')
+    
+    if request.method == 'POST':
+
+        file = request.files['file']
+        
+        if file.filename == '':
+            msg = 'Nenhum arquivo enviado!'
+            return render_template('upload.html', msg=msg)
+        
+        try:
+
+            timestamp = int(time.time())
+            fileName = f'{timestamp}_{file.filename}'
+            file.save(os.path.join(main.config['UPLOAD_FOLDER'], fileName))
+
+            connection, cursor = DB.connect()
+            cursor.execute("INSERT INTO apply (name, email, phone, fileName, vacancyID) VALUES (%s, %s, %s, %s, %s)", (name, email, phone, fileName, vacancyID))
+            
+            connection.commit()
+            
+            return redirect('/')
+
+        except Exception as e:
+            print(f'Back-End Error: {e}')
+        
+            return render_template('upload.html', msg='Erro de Back-End')
+
+        except Error as e:
+            print(f'DB Error: {e}')
+
+            return render_template('upload.html', msg='Erro de Database')
+
+
+        finally: 
+
+            DB.stop(connection, cursor)
+            return redirect('/')

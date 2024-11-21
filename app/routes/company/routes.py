@@ -1,10 +1,14 @@
-from flask import Blueprint, request, render_template, session, redirect
+from flask import Blueprint, request, render_template, session, redirect, send_from_directory
+import os
+import time
 from ...config import *
 from ...db_functions import *
 from mysql.connector import *
 import locale
 
 company = Blueprint('company', __name__, template_folder='templates')
+company.config['UPLOAD_FOLDER'] = os.path.join(company.root_path, '../../uploads/')
+os.makedirs(company.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @company.route('/company')
 def company_menu ():
@@ -240,3 +244,67 @@ def delete_vacancy (id):
         DB.stop(connection, cursor)
     
     return redirect('/company')
+
+@company.route('/download/<int:id>')
+def download(id):
+    try:
+        connection, cursor = DB.connect()
+        cursor.execute('''SELECT fileName FROM apply WHERE applyID = %s''', (id,))
+        filename = cursor.fetchone()
+    
+    except Error as e:
+        print(f'DB Error: {e}')
+
+    except Exception as e:
+        print(f'Back-End Error: {e}')
+
+    finally:
+        DB.stop(connection, cursor)
+
+    return send_from_directory(company.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+@company.route('/delete/<int:id>')
+def delete_file(id):
+    try:
+
+        connection, cursor = DB.connect()
+        cursor.execute('''SELECT fileName FROM apply WHERE applyID = %s''', (id,))
+        filename = cursor.fetchone()
+        
+        file_path = os.path.join(company.config['UPLOAD_FOLDER'], filename)
+        os.remove(file_path)
+
+        
+        cursor.execute("DELETE FROM apply WHERE fileName = %s", (filename,))
+        connection.commit()
+
+        return redirect('/')
+    
+    except Error as e:
+        return f"DB Error: {e}"
+    
+    except Exception as erro:
+        return f"Back-end Error: {e}"
+    
+    finally:
+        
+        DB.stop(connection, cursor)
+
+@company.route('/vacancy-docs/<int:id>')
+def vacancy_docs (id):
+
+    try:
+
+        connection, cursor = DB.connect()
+        cursor.execute('SELECT * FROM apply')
+        files = cursor.fetchall()
+    
+        return render_template('vacancy-applies.html',files=files)
+    
+    except Error as e:
+        return f"DB Error: {e}"  
+    except Exception as e:  
+        return f"Back-end Error: {e}"
+    finally:
+        
+        DB.stop(connection, cursor)
