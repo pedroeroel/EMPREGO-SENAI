@@ -42,9 +42,9 @@
     
     <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
     <script>
-        Inputmask('99.999.999/9999-99').mask(document.getElementById('cnpj'))
-        Inputmask('999.999.999-99').mask(document.getElementById('cpf'))
-        Inputmask('99 99999-9999').mask(document.getElementById('phoneNumber'))
+        Inputmask('99.999.999/9999-99').mask(document.getElementById('cnpj'));
+        Inputmask('(99) 99999-9999').mask(document.getElementById('phoneNumber'));
+        Inputmask('999.999.999-99').mask(document.getElementById('cpf'));
         Inputmask('numeric',{
             radixPoint: ",",
             groupSeparator: ".",

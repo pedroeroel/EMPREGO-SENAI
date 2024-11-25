@@ -5,7 +5,6 @@ import time
 import os
 import locale
 
-
 main = Blueprint('main', __name__, template_folder='templates')
 
 @main.route('/')
@@ -117,7 +116,15 @@ def upload (id):
     
     if request.method == 'POST':
 
-        file = request.files['file']
+        def allowed_file(filename):
+            ALLOWED_EXTENSIONS = {'pdf'}
+            return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+        if 'pdf' not in request.files:
+            print('No file part')
+            return redirect(f'/upload/{id}')
+        
+        file = request.files['pdf']
         
         if file.filename == '':
             msg = 'Nenhum arquivo enviado!'
@@ -126,7 +133,13 @@ def upload (id):
         try:
 
             timestamp = int(time.time())
-            fileName = f'{timestamp}_{file.filename}'
+            
+            if allowed_file(file.filename):
+                fileName = f'{timestamp}_{file.filename}'
+            else:
+                print('Invalid filename')
+                return redirect(f'/upload/{id}')
+
             file.save(os.path.join(main.config['UPLOAD_FOLDER'], fileName))
 
             name = request.form['name']

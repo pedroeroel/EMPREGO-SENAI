@@ -1,5 +1,6 @@
 import mysql.connector
 from app.config import *
+import re
 
 class DB:
 
@@ -20,3 +21,14 @@ class DB:
 
         cursor.close()
         connection.close()
+
+    def clearInput(type, input):
+        if type.lower() in ["cpf", "cnpj", "phone"]:
+        
+            return re.sub(r"\D", "", input)
+    
+        elif type.lower() == "currency":
+
+            raw = input.replace(".", "").replace("-", "").replace("/", "").replace("(", "").replace(")", "").replace(" ", "").replace("R$", "").replace(",", ".")
+        
+            return raw

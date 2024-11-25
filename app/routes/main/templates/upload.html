@@ -1,0 +1,61 @@
+{% extends 'model.html' %}
+
+{% block title %}
+    Upload PDF
+{% endblock %}
+
+{% block sessiontitle %}Candidatura{% endblock %}
+{% block sessionsubtitle %}Envie seu curriculo!{% endblock %}
+
+{% block content %}
+
+    <!-- Form for PDF upload -->
+    <form action="/upload-pdf" method="post" enctype="multipart/form-data" class="row">
+        <div class="mb-3 col-12 col-md-6">
+            <label for="name" class="form-label">Nome:</label>
+            <input id="name" required type="text" name="name" class="form-control" placeholder="Seu nome">
+        </div>
+    
+        <div class="mb-3 col-12 col-md-6">
+            <label for="email" class="form-label">E-mail:</label>
+            <input id="email" required type="email" name="email" class="form-control" placeholder="Seu e-mail">
+        </div>
+    
+        <div class="mb-3 col-12 col-md-6 col-lg-4">
+            <label for="phone" class="form-label">Telefone:</label>
+            <input id="phoneNumber" required type="text" placeholder="(00) 00000-0000" name="phone" class="form-control">
+        </div>
+    
+        <div class="mb-3 col-12 col-md-6 col-lg-8">
+            <label for="pdfFile" class="form-label">Selecione um arquivo PDF:</label>
+            <input id="pdfFile" required type="file" accept="application/pdf" name="pdf" class="form-control">
+        </div>
+    
+        <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+
+    <script>
+        Inputmask('(99) 99999-9999').mask(document.getElementById('phoneNumber'));
+        Inputmask('99.999.999/9999-99').mask(document.getElementById('cnpj'));
+        Inputmask('999.999.999-99').mask(document.getElementById('cpf'));
+
+        document.getElementById('pdfFile').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type !== 'application/pdf') {
+                alert("Insira um arquivo válido.");
+                event.target.value = '';
+            }
+        });
+        
+        Inputmask('numeric',{
+            radixPoint: ",",
+            groupSeparator: ".",
+            digits: 2,
+            autoGroup: true,
+            rightAlign: false,
+            allowMinus: false,
+            prefix: "R$ "
+        }).mask(document.getElementById('salary'));
+    </script>
+
+{% endblock %}

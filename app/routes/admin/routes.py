@@ -46,8 +46,8 @@ def new_company ():
         
         companyName = request.form['name']
         companyEmail = request.form['email']
-        companyCNPJ = request.form['cnpj']
-        companyPhoneNumber = request.form['phone']
+        companyCNPJ = DB.clearInput('cnpj' ,(request.form['cnpj']))
+        companyPhoneNumber = DB.clearInput('phone', (request.form['phone']))
         companyPassword = request.form['password']
 
         if not companyName or not companyEmail or not companyCNPJ or not companyPhoneNumber or not companyPassword:
@@ -104,11 +104,13 @@ def edit_company (id):
         
         companyName = request.form['name']
         companyEmail = request.form['email']
-        companyCNPJ = request.form['cnpj']
-        companyPhoneNumber = request.form['phone']
+        companyCNPJ = DB.clearInput('cnpj' ,(request.form['cnpj']))
+        companyPhoneNumber = DB.clearInput('phone', (request.form['phone']))
         companyPassword = request.form['password']
         
         connection, cursor = DB.connect()
+
+        print(companyCNPJ)
 
         cursor.execute(f'SELECT * FROM company WHERE companyID = {id} ;')
         company = cursor.fetchone()
@@ -118,6 +120,9 @@ def edit_company (id):
         
         elif len(companyCNPJ) != 14:
             return render_template('edit-company.html', company=company, id=id, errormsg='O CNPJ precisa ter 14 algarismos.')
+        
+        elif len(companyPhoneNumber) != 11:
+            return render_template('edit-company.html', company=company, id=id, errormsg='O número de telefone precisa ter 11 algarismos.')
         
         try:
 

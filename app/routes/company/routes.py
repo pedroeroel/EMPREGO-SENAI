@@ -58,7 +58,7 @@ def new_vancancy ():
         vacancyArrangement = request.form['arrangement']
         vacancyType = request.form['type']
         vacancyLocation = request.form['location']
-        vacancySalary = request.form['salary']
+        vacancySalary = DB.clearInput('currency', (request.form['salary']))
 
         if not vacancyTitle or not vacancyDescription or not vacancyArrangement or not vacancyType or not vacancyLocation or not companyID or not vacancySalary:
             return render_template('new-vacancy.html', errormsg='Todos os campos são obrigatórios!')
@@ -121,7 +121,7 @@ def edit_vacancy (id):
         vacancyArrangement = request.form['arrangement']
         vacancyType = request.form['type']
         vacancyLocation = request.form['location']
-        vacancySalary = request.form['salary']
+        vacancySalary = DB.clearInput('currency', (request.form['salary']))
 
         if not vacancyTitle or not vacancyDescription or not vacancyArrangement or not vacancyType or not vacancyLocation or not vacancySalary:
             return render_template('edit-vacancy.html', errormsg='All fields are obrigatory!')

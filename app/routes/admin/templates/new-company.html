@@ -14,7 +14,7 @@
     <form action="/new-company" method="post" class="row">
         <div class="mb-3 col-12 col-lg-6">
             <label for="name" class="form-label">Nome da Empresa:</label>
-            <input required type="text" name="name" class="form-control">
+            <input placeholder="Insira aqui o nome da empresa" required type="text" name="name" class="form-control">
         </div>
         
         <div class="mb-3 col-12 col-md-6 col-lg-3">
@@ -24,17 +24,17 @@
         
         <div class="mb-3 col-12 col-md-6 col-lg-3">
             <label for="phone" class="form-label">Telefone:</label>
-            <input id="phoneNumber" required type="text" name="phone" class="form-control">
+            <input id="phoneNumber" required type="text" placeholder="(00) 00000-0000" name="phone" class="form-control">
         </div>
         
         <div class="mb-3 col-12 col-lg-6">
             <label for="email" class="form-label">E-mail:</label>
-            <input required type="email" name="email" class="form-control">
+            <input placeholder="empresa_exemplo@email.com" required type="email" name="email" class="form-control">
         </div>
         
         <div class="mb-3 col-12 col-lg-6">
             <label for="password" class="form-label">Senha:</label>
-            <input required type="text" name="password" class="form-control">
+            <input placeholder="Insira a senha" required type="text" name="password" class="form-control">
         </div>
         
         <button type="submit" class="btn btn-primary mt-3">Editar Empresa</button>
@@ -42,9 +42,9 @@
     
     <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
     <script>
-        Inputmask('99.999.999/9999-99').mask(document.getElementById('cnpj'))
-        Inputmask('999.999.999-99').mask(document.getElementById('cpf'))
-        Inputmask('99 99999-9999').mask(document.getElementById('phoneNumber'))
+        Inputmask('99.999.999/9999-99').mask(document.getElementById('cnpj'));
+        Inputmask('(99) 99999-9999').mask(document.getElementById('phoneNumber'));
+        Inputmask('999.999.999-99').mask(document.getElementById('cpf'));
         Inputmask('numeric',{
             radixPoint: ",",
             groupSeparator: ".",

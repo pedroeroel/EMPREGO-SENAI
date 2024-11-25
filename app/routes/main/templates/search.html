@@ -25,9 +25,9 @@
             {% else %}
 
                 {% for vacancy in vacancies %}
-
-                    {% include 'components/vacancy-card.html' %}
-                
+                    <div class="m-0 col-12 col-lg-6 col-xl-4 my-2">
+                        {% include 'components/vacancy-card.html' %}
+                    </div>
                 {% endfor %}
 
             {% endif %}

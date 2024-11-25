@@ -1,5 +1,5 @@
-<div class="card w-100">
-    <div class="card-body">
+<div class="card h-100">
+    <div class="card-body d-flex justify-content-between flex-column">
         <h5 class="card-title text-start"><strong>{{ vacancy.title }}</strong></h5>
         <p class="card-text text-start fs-6 opacity-75">{{ vacancy.description }}</p>
     
@@ -12,16 +12,16 @@
             {{ vacancy['location'] }}
         </div>
     
-        <div class="row text-center justify-content-center g-3 flex-wrap">
+        <div class="row g-2 d-flex mt-3 justify-content-center">
             
             {% if vacancy.status == 'inactive' %}
 
-            <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary col-12 col-sm-4 col-md-3" href="/delete-vacancy/{{ vacancy['vacancyID'] }}">Excluir</a>
+            <a class="p-2 rounded-5 border border-1 btn btn-danger m-1 col-12" href="/delete-vacancy/{{ vacancy['vacancyID'] }}">Excluir</a>
             
             {% endif %}
             
-            <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary col-12 col-sm-4 col-md-3" href="/edit-vacancy/{{ vacancy['vacancyID'] }}">Editar</a>
-            <a class="p-2 rounded-5 mx-2 border border-1 btn btn-primary text-nowrap col-12 col-sm-6 col-md-4" onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-vacancy-status/{{ vacancy['vacancyID'] }}">
+            <a class="p-2 rounded-5 border border-1 btn btn-primary m-1 col-12" href="/edit-vacancy/{{ vacancy['vacancyID'] }}">Editar</a>
+            <a class="p-2 rounded-5 border border-1 btn btn-warning m-1 text-nowrap col-12" onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-vacancy-status/{{ vacancy['vacancyID'] }}">
                 {% if vacancy.status == 'active' %}Desativar{% else %}Ativar{% endif %}
             </a>
         </div>        

@@ -4,26 +4,14 @@
 Página do Administrador
 {% endblock %}
 
-{% block content %}
-<div class="p-5 container-fluid">
-    <h1 class="my-4">Menu Administrador</h1>
+{% block sessiontitle %}Menu Empresa{% endblock %}
+{% block sessionsubtitle %}Administre suas vagas!{% endblock %}
 
-    <hr>
+{% block content %}
 
     <!-- Admin menu -->
-    <div class="mb-3">
-        <ul class="list-unstyled">
-            <li>
-                <div class="my-2 d-flex justify-content-start">
-                    <a class="link p-2 rounded-5 border border-1" href="/new-company">Nova Empresa</a>
-                </div>
-            </li>
-            <li>
-                <div class="my-2 d-flex justify-content-start">
-                    <a class="link p-2 rounded-5 border border-1" href="/logout">Sair</a>
-                </div>
-            </li>
-        </ul>
+    <div class="mb-4 mt-2 justify-content-start row">
+        <a class="col-4 col-md-3 col-xl-2 btn btn-primary text-center p-2 rounded-5 border border-1" href="/new-company">Nova Empresa</a>
     </div>
 
     <hr>
@@ -34,14 +22,16 @@ Página do Administrador
     {% if not active_companies %}
         <p>Não há empresas ativas.</p>
     {% else %}
-        <div class="row g-3">
+        <div class="row g-4">
             {% for company in active_companies %}
-                {% include 'components/company-card.html' %}
+                <div class="col-12 col-lg-6 col-xl-4">
+                    {% include 'components/company-card.html' %}
+                </div>
             {% endfor %}
         </div>
     {% endif %}
 
-    <hr>
+    <hr class="mt-4">
 
     <!-- Inactive Companies Section -->
     <h2 class="my-4">Empresas Inativas</h2>
@@ -49,11 +39,12 @@ Página do Administrador
     {% if not inactive_companies %}
         <p>Não há empresas inativas.</p>
     {% else %}
-        <div class="row g-3">
+        <div class="row g-4">
             {% for company in inactive_companies %}
+            <div class="col-12 col-lg-6 col-xl-4">
                 {% include 'components/company-card.html' %}
+            </div>
             {% endfor %}
         </div>
     {% endif %}
-</div>
 {% endblock %}
