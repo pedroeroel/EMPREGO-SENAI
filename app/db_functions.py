@@ -10,7 +10,8 @@ class DB:
         host = DB_HOST,
         user = DB_USER,
         password = DB_PASSWORD,
-        database = DB_NAME
+        database = DB_NAME,
+        auth_plugin='mysql_native_password'
         )
 
         cursor = connection.cursor(dictionary=True)

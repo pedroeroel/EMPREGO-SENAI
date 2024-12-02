@@ -2,9 +2,9 @@ environment = 'development'
 
 if environment == 'development':
     DB_HOST = 'localhost'
-    DB_USER = 'root'
-    DB_PASSWORD = 'senai'
-    DB_NAME = 'emprego'
+    DB_USER = 'emprego'
+    DB_PASSWORD = 'empregoadmin'
+    DB_NAME = 'empreGO'
 
 # SECRET KEY
 

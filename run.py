@@ -1,4 +1,4 @@
-# run.py
+import os
 from app.app import create_app
 from app.config import *
 

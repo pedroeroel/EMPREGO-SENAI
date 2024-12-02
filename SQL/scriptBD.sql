@@ -37,3 +37,9 @@ CREATE TABLE apply (
     vacancyID INT,
     FOREIGN KEY (vacancyID) REFERENCES vacancy(vacancyID) 
 ) ;
+
+CREATE USER 'emprego'@'localhost'
+IDENTIFIED WITH mysql_native_password
+BY 'empregoadmin' ;
+
+GRANT ALL PRIVILEGES ON emprego.* TO 'emprego'@'localhost' ; 

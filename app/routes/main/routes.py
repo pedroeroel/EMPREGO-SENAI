@@ -1,11 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, session, send_from_directory
+from flask import Flask, Blueprint, render_template, request, redirect, session, send_from_directory
 from ...db_functions import DB
 from mysql.connector import *
 import time
 import os
 import locale
 
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads/'
+
 main = Blueprint('main', __name__, template_folder='templates')
+
 
 @main.route('/')
 def index():
@@ -28,10 +32,11 @@ def index():
 
         locale.setlocale(locale.LC_ALL, 'pt-BR.UTF-8')
 
-        for vacancy in vacancies:
-            salary = float(vacancy['salary'])
-            salary = locale.currency(salary, grouping=True)
-            vacancy['salary'] = salary
+        if vacancies:
+            for vacancy in vacancies:
+                salary = float(vacancy['salary'])
+                salary = locale.currency(salary, grouping=True)
+                vacancy['salary'] = salary
 
         DB.stop(connection, cursor)
 
@@ -111,11 +116,12 @@ def vacancy_details (id):
 
 @main.route('/upload/<int:id>', methods=['GET','POST'])
 def upload (id):
+
     if request.method == 'GET':
-        return render_template('upload.html')
+        return render_template('upload.html', vacancyID=id)
     
     if request.method == 'POST':
-
+        print(f"Upload folder: {app.config['UPLOAD_FOLDER']}")
         def allowed_file(filename):
             ALLOWED_EXTENSIONS = {'pdf'}
             return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -130,6 +136,9 @@ def upload (id):
             msg = 'Nenhum arquivo enviado!'
             return render_template('upload.html', msg=msg)
         
+        if not os.access(app.config['UPLOAD_FOLDER'], os.W_OK):
+            print("Directory is not writable")
+
         try:
 
             timestamp = int(time.time())
@@ -139,8 +148,8 @@ def upload (id):
             else:
                 print('Invalid filename')
                 return redirect(f'/upload/{id}')
-
-            file.save(os.path.join(main.config['UPLOAD_FOLDER'], fileName))
+            print(os.path.join(app.config['UPLOAD_FOLDER'], fileName))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], fileName))
 
             name = request.form['name']
             email = request.form['email']
@@ -150,6 +159,8 @@ def upload (id):
             cursor.execute("INSERT INTO apply (name, email, phone, fileName, vacancyID) VALUES (%s, %s, %s, %s, %s)", (name, email, phone, fileName, id))
             
             connection.commit()
+
+            DB.stop(connection, cursor)
             
             return redirect('/')
 
@@ -165,6 +176,4 @@ def upload (id):
 
 
         finally: 
-
-            DB.stop(connection, cursor)
             return redirect('/')
