@@ -1,0 +1,22 @@
+{% extends 'model.html' %}
+
+{% block title %}Candidaturas para {{ vacancy['title'] }}{% endblock %}
+
+{% block sessiontitle %}Candidaturas para {{ vacancy['title'] }}{% endblock %}
+{% block sessionsubtitle %}Gerencie as candidaturas recebidas para esta vaga{% endblock %}
+
+{% block content %}
+    {% if files %}
+        <div class="row g-4">
+            {% for file in files %}
+                <div class="col-12 col-md-6 col-xl-4 mt-4">
+                    <div class="card bg-light text-center w-100 h-100">
+                        {% include 'components/c-apply-card.html' %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">Nenhuma candidatura encontrada para esta vaga.</p>
+    {% endif %}
+{% endblock %}

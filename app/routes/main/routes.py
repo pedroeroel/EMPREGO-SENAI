@@ -1,14 +1,13 @@
-from flask import Flask, Blueprint, render_template, request, redirect, session, send_from_directory
+from flask import Flask, Blueprint, render_template, request, redirect, session, send_from_directory, current_app
 from ...db_functions import DB
 from mysql.connector import *
 import time
 import os
 import locale
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads/'
 
-main = Blueprint('main', __name__, template_folder='templates')
+
+main = Blueprint('main', __name__, template_folder='templates', )
 
 
 @main.route('/')
@@ -117,11 +116,14 @@ def vacancy_details (id):
 @main.route('/upload/<int:id>', methods=['GET','POST'])
 def upload (id):
 
+    if session:
+        return redirect(f'/vacancy-details/{id}')
+
     if request.method == 'GET':
         return render_template('upload.html', vacancyID=id)
     
     if request.method == 'POST':
-        print(f"Upload folder: {app.config['UPLOAD_FOLDER']}")
+        print(f"Upload folder: {current_app.config['UPLOAD_FOLDER']}")
         def allowed_file(filename):
             ALLOWED_EXTENSIONS = {'pdf'}
             return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -136,7 +138,7 @@ def upload (id):
             msg = 'Nenhum arquivo enviado!'
             return render_template('upload.html', msg=msg)
         
-        if not os.access(app.config['UPLOAD_FOLDER'], os.W_OK):
+        if not os.access(current_app.config['UPLOAD_FOLDER'], os.W_OK):
             print("Directory is not writable")
 
         try:
@@ -148,8 +150,9 @@ def upload (id):
             else:
                 print('Invalid filename')
                 return redirect(f'/upload/{id}')
-            print(os.path.join(app.config['UPLOAD_FOLDER'], fileName))
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], fileName))
+            
+            print(os.path.join(current_app.config['UPLOAD_FOLDER'], fileName))
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], fileName))
 
             name = request.form['name']
             email = request.form['email']

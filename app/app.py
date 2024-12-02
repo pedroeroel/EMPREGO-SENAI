@@ -9,18 +9,19 @@ import os
 def create_app():
     app = Flask(__name__)
     app.secret_key = SECRET_KEY
-    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
 
-    try:
-        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    except OSError as e:
-        print(f"CRITICAL ERROR creating uploads directory: {e}")
-        raise
+    app.config['UPLOAD_FOLDER'] = 'app/uploads/' # Definido aqui
+    UPLOAD_FOLDER = app.config['UPLOAD_FOLDER'] # Atribui o caminho globalmente.
+    # try:
+    #     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    # except OSError as e:
+    #     print(f"CRITICAL ERROR creating uploads directory: {e}")
+    #     raise
 
     # Register blueprints
-    app.register_blueprint(main, config={'UPLOAD_FOLDER': app.config['UPLOAD_FOLDER']})
-    app.register_blueprint(auth, config={'UPLOAD_FOLDER': app.config['UPLOAD_FOLDER']})
-    app.register_blueprint(company, config={'UPLOAD_FOLDER': app.config['UPLOAD_FOLDER']})
-    app.register_blueprint(admin, config={'UPLOAD_FOLDER': app.config['UPLOAD_FOLDER']})
+    app.register_blueprint(main)
+    app.register_blueprint(auth)
+    app.register_blueprint(company)
+    app.register_blueprint(admin)
 
     return app

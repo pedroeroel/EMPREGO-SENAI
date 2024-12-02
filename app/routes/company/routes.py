@@ -1,9 +1,10 @@
-from flask import Blueprint, request, render_template, session, redirect, send_from_directory
+from flask import Blueprint, request, render_template, session, redirect, send_from_directory, current_app
 import os
 import time
 from ...config import *
 from ...db_functions import *
 from mysql.connector import *
+import locale
 
 company = Blueprint('company', __name__, template_folder='templates')
 
@@ -26,6 +27,18 @@ def company_menu ():
 
         cursor.execute("SELECT * FROM vacancy WHERE companyID = %s AND status = 'inactive' ORDER BY vacancyID DESC", (company['companyID'],))
         inactiveVacancies = cursor.fetchall()
+
+        locale.setlocale(locale.LC_ALL, 'pt-BR.UTF-8')
+
+        for vacancy in activeVacancies:
+            salary = float(vacancy['salary'])
+            salary = locale.currency(salary, grouping=True)
+            vacancy['salary'] = salary
+
+        for vacancy in inactiveVacancies:
+            salary = float(vacancy['salary'])
+            salary = locale.currency(salary, grouping=True)
+            vacancy['salary'] = salary
 
     except Exception as e:
         print(f'Backend Error: {e}')
@@ -217,6 +230,13 @@ def delete_vacancy (id):
             return redirect('/company')
             
         else:
+
+            cursor.execute('SELECT fileName FROM apply WHERE vacancyID = %s', (id,))
+            files = cursor.fetchall()
+
+            for file in files:
+                os.remove(f'{current_app.config['UPLOAD_FOLDER']}{file['fileName']}')
+
             cursor.execute('''DELETE FROM vacancy WHERE vacancyID = %s ;''', (id,))        
 
     except Exception as e:
@@ -237,60 +257,77 @@ def download(id):
         connection, cursor = DB.connect()
         cursor.execute('''SELECT fileName FROM apply WHERE applyID = %s''', (id,))
         filename = cursor.fetchone()
-    
-    except Error as e:
-        print(f'DB Error: {e}')
 
-    except Exception as e:
-        print(f'Back-End Error: {e}')
+        if filename is None:
+            return "File not found", 404
 
+        filename = filename[0]  
+        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+
+        if not os.path.exists(file_path):
+            return "File not found on server", 404
+
+        return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+    except mysql.connector.Error as db_error:  # Catch specific database errors
+        print(f"Database Error: {db_error}")
+        return f"Database Error: {db_error}", 500
+    except FileNotFoundError as fnf_error:  #Catch file not found errors
+        print(f"File Not Found: {fnf_error}")
+        return f"File Not Found: {fnf_error}", 404
+    except Exception as e:  #Catch other unexpected errors
+        print(f"Unexpected Error: {e}")
+        return f"An unexpected error occurred", 500
     finally:
         DB.stop(connection, cursor)
 
-    return send_from_directory(company.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+@company.route('/vacancy-docs/<int:id>')
+def vacancy_docs(id):
+    try:
+        connection, cursor = DB.connect()
+        cursor.execute('SELECT * FROM vacancy WHERE vacancyID = %s', (id,))
+        vacancy = cursor.fetchone()
+        cursor.execute('SELECT * FROM apply WHERE vacancyID = %s', (id,))
+        files = cursor.fetchall()
+
+    except Error as e:
+        print(f"DB Error: {e}")
+        return f"DB Error: {e}", 500
+    except Exception as e:
+        print(f"Back-end Error: {e}")
+        return f"Back-end Error: {e}", 500
+    finally:
+        DB.stop(connection, cursor)
+
+    return render_template('vacancy-applies.html', files=files, vacancy=vacancy)
 
 @company.route('/delete/<int:id>')
 def delete_file(id):
     try:
-
         connection, cursor = DB.connect()
-        cursor.execute('''SELECT fileName FROM apply WHERE applyID = %s''', (id,))
-        filename = cursor.fetchone()
-        
-        file_path = os.path.join(company.config['UPLOAD_FOLDER'], filename)
-        os.remove(file_path)
+        cursor.execute('''SELECT fileName, vacancyID FROM apply WHERE applyID = %s''', (id,))
+        fileData = cursor.fetchone()
 
-        
-        cursor.execute("DELETE FROM apply WHERE fileName = %s", (filename,))
+        if not fileData:
+            return "Arquivo não encontrado!", 404 # Handle case where file doesn't exist
+
+        fileName = fileData[0]
+        vacancy_id = fileData[1]
+        filePath = os.path.join(current_app.config['UPLOAD_FOLDER'], fileName) #Use current_app
+
+        if os.path.exists(filePath):
+            os.remove(filePath)
+
+        cursor.execute("DELETE FROM apply WHERE applyID = %s", (id,))
         connection.commit()
+        return redirect('vacancy-docs') # Redirect to the correct URL
 
-        return redirect('/')
-    
     except Error as e:
-        return f"DB Error: {e}"
-    
-    except Exception as erro:
-        return f"Back-end Error: {e}"
-    
+        print(f"DB Error: {e}")
+        return f"DB Error: {e}", 500 # HTTP error code
+    except Exception as e:
+        print(f"Back-end Error: {e}")
+        return f"Back-end Error: {e}", 500 # HTTP error code
     finally:
-        
-        DB.stop(connection, cursor)
-
-@company.route('/vacancy-docs/<int:id>')
-def vacancy_docs (id):
-
-    try:
-
-        connection, cursor = DB.connect()
-        cursor.execute('SELECT * FROM apply')
-        files = cursor.fetchall()
-    
-        return render_template('vacancy-applies.html',files=files)
-    
-    except Error as e:
-        return f"DB Error: {e}"  
-    except Exception as e:  
-        return f"Back-end Error: {e}"
-    finally:
-        
         DB.stop(connection, cursor)

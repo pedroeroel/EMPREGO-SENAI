@@ -1,0 +1,10 @@
+<div class="card h-100">
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title text-start"><strong>Candidatura nº{{ file.applyID }} ({{ file.vacancyID }})</strong></h5>
+        <p class="card-text text-start fs-6 opacity-75">Arquivo: {{ file.fileName }}</p>
+        <div class="row g-2 d-flex mt-3 justify-content-center">
+            <a class="p-2 rounded-5 border border-1 btn btn-primary m-1 col-12" href="{{ url_for('company.download', id=file.applyID) }}">Download</a>
+            <a class="p-2 rounded-5 border border-1 btn btn-danger m-1 col-12" href="{{ url_for('company.delete_file', id=file.applyID) }}" onclick="return confirm('Tem certeza que deseja excluir este arquivo?')">Excluir</a>
+        </div>
+    </div>
+</div>

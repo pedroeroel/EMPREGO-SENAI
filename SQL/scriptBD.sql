@@ -43,3 +43,27 @@ IDENTIFIED WITH mysql_native_password
 BY 'empregoadmin' ;
 
 GRANT ALL PRIVILEGES ON emprego.* TO 'emprego'@'localhost' ; 
+
+DELIMITER $$
+
+CREATE TRIGGER companyDeletion
+BEFORE DELETE ON company
+FOR EACH ROW
+BEGIN
+    DELETE FROM apply
+    WHERE vacancyID IN (SELECT vacancyID FROM vacancy WHERE companyID = OLD.companyID);
+    DELETE FROM vacancy
+    WHERE companyID = OLD.companyID;
+END;
+$$
+
+CREATE TRIGGER vacancyDeletion
+BEFORE DELETE ON vacancy
+FOR EACH ROW
+BEGIN
+    DELETE FROM apply
+    WHERE vacancyID = OLD.vacancyID;
+END;
+$$
+
+DELIMITER ;

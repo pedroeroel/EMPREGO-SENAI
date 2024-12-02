@@ -13,17 +13,18 @@
         </div>
     
         <div class="row g-2 d-flex mt-3 justify-content-center">
-            
-            {% if vacancy.status == 'inactive' %}
-
-            <a class="p-2 rounded-5 border border-1 btn btn-danger m-1 col-12" href="/delete-vacancy/{{ vacancy['vacancyID'] }}">Excluir</a>
-            
-            {% endif %}
-            
+            <a class="p-2 rounded-5 border border-1 btn btn-primary m-1 col-12" href="/vacancy-docs/{{ vacancy['vacancyID'] }}">Candidaturas</a>
             <a class="p-2 rounded-5 border border-1 btn btn-primary m-1 col-12" href="/edit-vacancy/{{ vacancy['vacancyID'] }}">Editar</a>
-            <a class="p-2 rounded-5 border border-1 btn btn-warning m-1 text-nowrap col-12" onclick="confirm('Tem certeza de que quer desativar esta empresa?')" href="/switch-vacancy-status/{{ vacancy['vacancyID'] }}">
-                {% if vacancy.status == 'active' %}Desativar{% else %}Ativar{% endif %}
+            {% if vacancy.status == 'active' %}
+            <a class="p-2 rounded-5 border border-1 btn btn-warning m-1 text-nowrap col-12" onclick="confirm('Tem certeza de que quer desativar esta vaga?')" href="/switch-vacancy-status/{{ vacancy['vacancyID'] }}">
+                Desativar
             </a>
+            {% else %}
+            <a class="p-2 rounded-5 border border-1 btn btn-warning m-1 text-nowrap col-12" onclick="confirm('Tem certeza de que quer desativar esta vaga?')" href="/switch-vacancy-status/{{ vacancy['vacancyID'] }}">
+                Ativar
+            </a>
+            <a class="p-2 rounded-5 border border-1 btn btn-danger m-1 col-12" href="/delete-vacancy/{{ vacancy['vacancyID'] }}" onclick="confirm('Tem certeza que deseja excluir esta vaga?')">Excluir</a>
+            {% endif %}
         </div>        
     </div>
     <div class="card-footer text-muted" id="salary">{{ vacancy.salary }}</div>
