@@ -1,10 +1,32 @@
-<div class="card h-100">
-    <div class="card-body d-flex flex-column">
-        <h5 class="card-title text-start"><strong>Candidatura nº{{ file.applyID }} ({{ file.vacancyID }})</strong></h5>
-        <p class="card-text text-start fs-6 opacity-75">Arquivo: {{ file.fileName }}</p>
-        <div class="row g-2 d-flex mt-3 justify-content-center">
-            <a class="p-2 rounded-5 border border-1 btn btn-primary m-1 col-12" href="{{ url_for('company.download', id=file.applyID) }}">Download</a>
-            <a class="p-2 rounded-5 border border-1 btn btn-danger m-1 col-12" href="{{ url_for('company.delete_file', id=file.applyID) }}" onclick="return confirm('Tem certeza que deseja excluir este arquivo?')">Excluir</a>
+<div class="card h-100" style="min-height: 27rem;">
+    <div class="card-body d-flex justify-content-between flex-column">
+        <h5 class="card-title text-start">
+            <strong>{{ file.name }}</strong>
+        </h5>
+        <p class="card-text text-start fs-6 opacity-75">
+            <strong>ID da Candidatura:</strong> {{ file.applyID }} <br>
+            <strong>E-mail:</strong> {{ file.email }} <br>
+            <strong>Telefone:</strong> {{ file.phone }}
+        </p>
+
+        <div class="col-12 opacity-50 text-center text-md-start text-lg-start text-wrap">
+            Arquivo: {{ file.fileName }}
         </div>
+
+        <div class="row g-2 d-flex mt-3 justify-content-center">
+            <a class="p-2 rounded-5 border border-1 btn btn-primary m-1 col-12" 
+                href="{{ url_for('company.download', id=file.applyID) }}" 
+                target="_blank">
+                Download
+            </a>
+            <a class="p-2 rounded-5 border border-1 btn btn-danger m-1 col-12" 
+                href="/download/{{ file.applyID }}" 
+                onclick="return confirm('Tem certeza que deseja excluir este arquivo?')">
+                Excluir
+            </a>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <strong>Data:</strong> {{ file.date }}
     </div>
 </div>

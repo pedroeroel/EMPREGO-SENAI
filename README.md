@@ -20,7 +20,9 @@ This project consists of a web app that promotes and helps in the search for job
 
  - Company registration, editing, activation/deactivation and exclusion;
  - Vacancy registration, editing, activation/deactivation and exclusion;
- - (Soon);
+ - Applying for jobs with PDF résumé upload;
+ - PDF files download;
+ - Search system including location, title, description and arrangement;
 
 ## Tools & Technology
 
@@ -31,7 +33,7 @@ This project consists of a web app that promotes and helps in the search for job
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
 
-## Authors
+## Author
 
 - Pedro Eduardo Roel - [github.com/pedroeroel](https://github.com/pedroeroel) - pedroedroel@gmail.com
 

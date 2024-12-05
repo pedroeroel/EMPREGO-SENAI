@@ -251,37 +251,6 @@ def delete_vacancy (id):
     
     return redirect('/company')
 
-@company.route('/download/<int:id>')
-def download(id):
-    try:
-        connection, cursor = DB.connect()
-        cursor.execute('''SELECT fileName FROM apply WHERE applyID = %s''', (id,))
-        filename = cursor.fetchone()
-
-        if filename is None:
-            return "File not found", 404
-
-        filename = filename[0]  
-        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-
-        if not os.path.exists(file_path):
-            return "File not found on server", 404
-
-        return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
-
-    except mysql.connector.Error as db_error:  # Catch specific database errors
-        print(f"Database Error: {db_error}")
-        return f"Database Error: {db_error}", 500
-    except FileNotFoundError as fnf_error:  #Catch file not found errors
-        print(f"File Not Found: {fnf_error}")
-        return f"File Not Found: {fnf_error}", 404
-    except Exception as e:  #Catch other unexpected errors
-        print(f"Unexpected Error: {e}")
-        return f"An unexpected error occurred", 500
-    finally:
-        DB.stop(connection, cursor)
-
-
 @company.route('/vacancy-docs/<int:id>')
 def vacancy_docs(id):
     try:
@@ -301,6 +270,56 @@ def vacancy_docs(id):
         DB.stop(connection, cursor)
 
     return render_template('vacancy-applies.html', files=files, vacancy=vacancy)
+
+@company.route('/download/<int:id>')
+def download(id):
+    
+    if not session:
+        return redirect('/login')
+
+    try:
+
+        connection, cursor = DB.connect()
+
+        cursor.execute('''SELECT companyID FROM vacancy WHERE vacancyID = (SELECT vacancyID FROM apply WHERE applyID = %s);''', (id,))
+        companyID = cursor.fetchone()
+
+        company = session['companyInfo']
+
+        if companyID['companyID'] != company['companyID']:
+            redirect('/company')
+
+        cursor.execute('''SELECT fileName FROM apply WHERE applyID = %s ;''', (id,))
+        filename = cursor.fetchone()
+
+        if not filename:
+            return redirect('/') 
+
+        filename = filename['fileName']  
+        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+
+        if not os.path.exists(file_path):
+            return "File not found on server", 404
+
+
+        return send_from_directory(f"{os.getcwd()}/app/uploads/", filename, as_attachment=False)
+
+
+    except mysql.connector.Error as db_error:  # Catch specific database errors
+        print(f"Database Error: {db_error}")
+        return f"Database Error: {db_error}", 500
+    
+    except FileNotFoundError as fnf_error:  #Catch file not found errors
+        print(f"File Not Found: {fnf_error}")
+        return f"File Not Found: {fnf_error}", 404
+    
+    except Exception as e:  #Catch other unexpected errors
+        print(f"Unexpected Error: {e}")
+        return redirect('/company')
+
+    finally:
+        DB.stop(connection, cursor)
+
 
 @company.route('/delete/<int:id>')
 def delete_file(id):

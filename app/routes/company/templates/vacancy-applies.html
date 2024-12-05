@@ -3,7 +3,7 @@
 {% block title %}Candidaturas para {{ vacancy['title'] }}{% endblock %}
 
 {% block sessiontitle %}Candidaturas para {{ vacancy['title'] }}{% endblock %}
-{% block sessionsubtitle %}Gerencie as candidaturas recebidas para esta vaga{% endblock %}
+{% block sessionsubtitle %}ID: {{ vacancy.vacancyID }}{% endblock %}
 
 {% block content %}
     {% if files %}
