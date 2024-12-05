@@ -8,6 +8,7 @@ import locale
 
 company = Blueprint('company', __name__, template_folder='templates')
 
+
 @company.route('/company')
 def company_menu ():
 
@@ -234,7 +235,7 @@ def delete_vacancy (id):
             files = cursor.fetchall()
 
             for file in files:
-                os.remove(f"{current_app.config['UPLOAD_FOLDER']}{file['fileName']}")
+                os.remove(f'{current_app.config['UPLOAD_FOLDER']}{file['fileName']}')
 
             cursor.execute('''DELETE FROM vacancy WHERE vacancyID = %s ;''', (id,))        
 
@@ -249,37 +250,6 @@ def delete_vacancy (id):
         DB.stop(connection, cursor)
     
     return redirect('/company')
-
-@company.route('/download/<int:id>')
-def download(id):
-    try:
-        connection, cursor = DB.connect()
-        cursor.execute('''SELECT fileName FROM apply WHERE applyID = %s''', (id,))
-        filename = cursor.fetchone()
-
-        if filename is None:
-            return "File not found", 404
-
-        filename = filename[0]  
-        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-
-        if not os.path.exists(file_path):
-            return "File not found on server", 404
-
-        return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
-
-    except mysql.connector.Error as db_error:  # Catch specific database errors
-        print(f"Database Error: {db_error}")
-        return f"Database Error: {db_error}", 500
-    except FileNotFoundError as fnf_error:  #Catch file not found errors
-        print(f"File Not Found: {fnf_error}")
-        return f"File Not Found: {fnf_error}", 404
-    except Exception as e:  #Catch other unexpected errors
-        print(f"Unexpected Error: {e}")
-        return f"An unexpected error occurred", 500
-    finally:
-        DB.stop(connection, cursor)
-
 
 @company.route('/vacancy-docs/<int:id>')
 def vacancy_docs(id):
@@ -371,7 +341,7 @@ def delete_file(id):
 
         cursor.execute("DELETE FROM apply WHERE applyID = %s", (id,))
         connection.commit()
-        return redirect('/vacancy-docs') # Redirect to the correct URL
+        return redirect(f'/vacancy-docs/{vacancyID}') # Redirect to the correct URL
 
     except Error as e:
         print(f"DB Error: {e}")
