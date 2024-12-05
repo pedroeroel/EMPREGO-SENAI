@@ -8,7 +8,7 @@
 :construction: In development :construction:
 
 **Description:**
-This project consists of a web app that promotes and helps in the search for job vacancies.
+This project consists of a web app that promotes and helps in the search for jobs.
 
 ## Index
 * [Features](#features)
