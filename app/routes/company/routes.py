@@ -8,7 +8,6 @@ import locale
 
 company = Blueprint('company', __name__, template_folder='templates')
 
-
 @company.route('/company')
 def company_menu ():
 
@@ -235,7 +234,7 @@ def delete_vacancy (id):
             files = cursor.fetchall()
 
             for file in files:
-                os.remove(f'{current_app.config['UPLOAD_FOLDER']}{file['fileName']}')
+                os.remove(f"{current_app.config['UPLOAD_FOLDER']}{file['fileName']}")
 
             cursor.execute('''DELETE FROM vacancy WHERE vacancyID = %s ;''', (id,))        
 
@@ -261,13 +260,13 @@ def download(id):
         if filename is None:
             return "File not found", 404
 
-        filename = filename[0]  
+        filename = filename['fileName']  
         file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
 
         if not os.path.exists(file_path):
             return "File not found on server", 404
 
-        return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+        return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
     except mysql.connector.Error as db_error:  # Catch specific database errors
         print(f"Database Error: {db_error}")
@@ -321,7 +320,7 @@ def delete_file(id):
 
         cursor.execute("DELETE FROM apply WHERE applyID = %s", (id,))
         connection.commit()
-        return redirect('vacancy-docs') # Redirect to the correct URL
+        return redirect('/vacancy-docs') # Redirect to the correct URL
 
     except Error as e:
         print(f"DB Error: {e}")
