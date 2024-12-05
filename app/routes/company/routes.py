@@ -273,7 +273,7 @@ def vacancy_docs(id):
 
 @company.route('/download/<int:id>')
 def download(id):
-    
+
     if not session:
         return redirect('/login')
 
@@ -321,26 +321,27 @@ def download(id):
         DB.stop(connection, cursor)
 
 
-@company.route('/delete/<int:id>')
+@company.route('/delete-file/<int:id>')
 def delete_file(id):
     try:
         connection, cursor = DB.connect()
-        cursor.execute('''SELECT fileName, vacancyID FROM apply WHERE applyID = %s''', (id,))
+        cursor.execute('''SELECT fileName, vacancyID FROM apply WHERE applyID = %s;''', (id,))
         fileData = cursor.fetchone()
 
         if not fileData:
             return "Arquivo não encontrado!", 404 # Handle case where file doesn't exist
 
-        fileName = fileData[0]
-        vacancy_id = fileData[1]
-        filePath = os.path.join(current_app.config['UPLOAD_FOLDER'], fileName) #Use current_app
+        fileName = fileData['fileName']
+        vacancyID = fileData['vacancyID']
+        filePath = os.path.join(f"{os.getcwd()}/app/uploads/", fileName) #Use current_app
 
         if os.path.exists(filePath):
             os.remove(filePath)
+            print('File removed')
 
         cursor.execute("DELETE FROM apply WHERE applyID = %s", (id,))
         connection.commit()
-        return redirect('vacancy-docs') # Redirect to the correct URL
+        return redirect(f'/vacancy-docs/{vacancyID}') # Redirect to the correct URL
 
     except Error as e:
         print(f"DB Error: {e}")

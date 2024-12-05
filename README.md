@@ -1,7 +1,7 @@
 ### Curso Técnico de Desenvolvimento de Sistemas - SENAI Itapeva
 
 # EmpreGO
-![BRAND]()
+![BRAND](static/BRAND.)
 
 ## Status
 
